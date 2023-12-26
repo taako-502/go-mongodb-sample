@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	customer_infrastructure "go-mongodb-sample/infrastructures/customers"
 	"log"
 	"time"
 
@@ -27,15 +28,14 @@ func main() {
 	// データベースとコレクションを選択
 	collection := client.Database("testdb").Collection("testcollection")
 
-	// 挿入するドキュメント
-	document := bson.D{{Key: "name", Value: "Alice"}, {Key: "age", Value: 25}}
-
-	// ドキュメントを挿入
-	insertResult, err := collection.InsertOne(ctx, document)
+	c := customer_infrastructure.NewCustomer(ctx, collection)
+	dto := customer_infrastructure.NewCustomerDTO("Alice", "alice@gmail.com", "Tokyo", nil)
+	customer, err := c.Create(dto)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Inserted document: ", insertResult.InsertedID)
+
+	fmt.Println("Inserted a single document: ", customer)
 
 	// ドキュメントを取得するクエリ
 	var result bson.D
