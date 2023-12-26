@@ -7,7 +7,6 @@ import (
 	"log"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -38,10 +37,9 @@ func main() {
 	fmt.Println("Inserted a single document: ", customer)
 
 	// ドキュメントを取得するクエリ
-	var result bson.D
-	err = collection.FindOne(ctx, bson.D{{Key: "name", Value: "Alice"}}).Decode(&result)
+	findedCustomer, err := c.FindOne(customer.ID)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Found document: ", result)
+	fmt.Println("Found document: ", findedCustomer)
 }
