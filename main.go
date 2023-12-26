@@ -24,5 +24,5 @@ func main() {
 	defer client.Disconnect(ctx)
 
 	// サンプルを実行
-	example.Exammple(connectionString, ctx, client)
+	example.Exammple(connectionString, ctx, client, "testdb")
 }
