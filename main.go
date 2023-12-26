@@ -25,9 +25,9 @@ func main() {
 	defer client.Disconnect(ctx)
 
 	// データベースとコレクションを選択
-	collection := client.Database("testdb").Collection("testcollection")
-
-	c := customer_infrastructure.NewCustomer(ctx, collection)
+	c := customer_infrastructure.NewCustomer(ctx,
+		client.Database("testdb").Collection("customer"),
+	)
 	dto := customer_infrastructure.NewCustomerDTO("Alice", "alice@gmail.com", "Tokyo", nil)
 	customer, err := c.Create(dto)
 	if err != nil {
