@@ -42,7 +42,7 @@ func main() {
 	e.POST("/customer", customerController.Create)
 	productController := product_controller.NewProductController(ctx, client.Database("testdb").Collection("product"))
 	e.POST("/product", productController.Create)
-	orderController := order_controller.NewOrderController(ctx, client.Database("testdb").Collection("order"))
+	orderController := order_controller.NewOrderController(connectionString, "testdb", "order")
 	e.GET("/orders/:customer_id", orderController.FindByCustomerID)
 	e.POST("/order", orderController.Create)
 

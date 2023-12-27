@@ -1,16 +1,11 @@
 package order_controller
 
-import (
-	"context"
-
-	"go.mongodb.org/mongo-driver/mongo"
-)
-
 type OrderController struct {
-	Ctx        context.Context
-	Collection *mongo.Collection
+	ConnectionString string
+	DBName           string
+	CollectionName   string
 }
 
-func NewOrderController(ctx context.Context, collection *mongo.Collection) OrderController {
-	return OrderController{Ctx: ctx, Collection: collection}
+func NewOrderController(con string, DBName string, CollectionName string) OrderController {
+	return OrderController{ConnectionString: con, DBName: DBName, CollectionName: CollectionName}
 }

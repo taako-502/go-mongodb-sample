@@ -1,13 +1,18 @@
 package order_controller
 
 import (
+	"context"
 	"errors"
+	"log"
 	"net/http"
+	"time"
 
 	order_infrastructure "go-mongodb-sample/app/infrastructures/orders"
 
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func (oo OrderController) FindByCustomerID(c echo.Context) error {
@@ -16,7 +21,17 @@ func (oo OrderController) FindByCustomerID(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	oi := order_infrastructure.NewOrderRepository(oo.Ctx, oo.Collection)
+	// コンテキストを設定
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(oo.ConnectionString))
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer client.Disconnect(ctx)
+
+	collection := client.Database(oo.DBName).Collection(oo.CollectionName)
+	oi := order_infrastructure.NewOrderRepository(ctx, collection)
 	order, err := oi.FindByCustomerID(customerID)
 	if errors.Is(err, order_infrastructure.ErrOrderNotFound) {
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())
