@@ -24,4 +24,5 @@ type Order struct {
 
 type OrderAdapter interface {
 	Create(dto *order_infrastructure.OrderDTO) (*order_infrastructure.OrderDTO, error)
+	FindByCustomerID(customerID primitive.ObjectID) ([]order_infrastructure.OrderDTO, error)
 }

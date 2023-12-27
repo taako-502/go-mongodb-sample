@@ -40,10 +40,11 @@ func main() {
 	// ルートを設定
 	customerController := customer_controller.NewCostumerController(ctx, client.Database("testdb").Collection("customer"))
 	e.POST("/customer", customerController.Create)
-	orderController := order_controller.NewOrderController(ctx, client.Database("testdb").Collection("order"))
-	e.POST("/order", orderController.Create)
 	productController := product_controller.NewProductController(ctx, client.Database("testdb").Collection("product"))
 	e.POST("/product", productController.Create)
+	orderController := order_controller.NewOrderController(ctx, client.Database("testdb").Collection("order"))
+	e.GET("/orders/:customer_id", orderController.FindByCustomerID)
+	e.POST("/order", orderController.Create)
 
 	// サーバーをポート番号1323で起動
 	e.Logger.Fatal(e.Start(":1323"))
