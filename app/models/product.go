@@ -3,7 +3,7 @@ package model
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	product_infrastructure "go-mongodb-sample/infrastructures/products"
+	product_infrastructure "go-mongodb-sample/app/infrastructures/products"
 )
 
 type Product struct {
