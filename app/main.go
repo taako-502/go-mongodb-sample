@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"go-mongodb-sample/internal/example"
+	"go-mongodb-sample/app/internal/example"
 	"log"
 	"net/http"
 	"time"
