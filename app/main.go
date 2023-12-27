@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	customer_controller "go-mongodb-sample/app/controllers/customer"
+	order_controller "go-mongodb-sample/app/controllers/order"
+	product_controller "go-mongodb-sample/app/controllers/product"
 	"go-mongodb-sample/app/internal/example"
 	"log"
 	"time"
@@ -39,6 +41,10 @@ func main() {
 	// ルートを設定
 	customerController := customer_controller.NewCostumerController(ctx, client.Database("testdb").Collection("customer"))
 	e.POST("/customer", customerController.Create)
+	orderController := order_controller.NewOrderController(ctx, client.Database("testdb").Collection("order"))
+	e.POST("/order", orderController.Create)
+	productController := product_controller.NewProductController(ctx, client.Database("testdb").Collection("product"))
+	e.POST("/product", productController.Create)
 
 	// サーバーをポート番号1323で起動
 	e.Logger.Fatal(e.Start(":1323"))
