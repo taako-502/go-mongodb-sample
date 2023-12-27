@@ -5,7 +5,6 @@ import (
 	customer_controller "go-mongodb-sample/app/controllers/customer"
 	order_controller "go-mongodb-sample/app/controllers/order"
 	product_controller "go-mongodb-sample/app/controllers/product"
-	"go-mongodb-sample/app/internal/example"
 	"log"
 	"time"
 
@@ -29,7 +28,7 @@ func main() {
 	defer client.Disconnect(ctx)
 
 	// サンプルを実行
-	example.Exammple(connectionString, ctx, client, "testdb")
+	// example.Exammple(connectionString, ctx, client, "testdb")
 
 	// インスタンスを作成
 	e := echo.New()
