@@ -2,9 +2,10 @@ package main
 
 import (
 	"context"
-	"go-mongodb-sample/app/internal/example"
+	customer_controller "go-mongodb-sample/app/controllers/customer"
+	order_controller "go-mongodb-sample/app/controllers/order"
+	product_controller "go-mongodb-sample/app/controllers/product"
 	"log"
-	"net/http"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -27,7 +28,7 @@ func main() {
 	defer client.Disconnect(ctx)
 
 	// サンプルを実行
-	example.Exammple(connectionString, ctx, client, "testdb")
+	// example.Exammple(connectionString, ctx, client, "testdb")
 
 	// インスタンスを作成
 	e := echo.New()
@@ -37,12 +38,13 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// ルートを設定
-	e.GET("/", hello)
+	customerController := customer_controller.NewCostumerController(ctx, client.Database("testdb").Collection("customer"))
+	e.POST("/customer", customerController.Create)
+	orderController := order_controller.NewOrderController(ctx, client.Database("testdb").Collection("order"))
+	e.POST("/order", orderController.Create)
+	productController := product_controller.NewProductController(ctx, client.Database("testdb").Collection("product"))
+	e.POST("/product", productController.Create)
 
 	// サーバーをポート番号1323で起動
 	e.Logger.Fatal(e.Start(":1323"))
-}
-
-func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!")
 }
