@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
+	customer_controller "go-mongodb-sample/app/controllers/customer"
 	"go-mongodb-sample/app/internal/example"
 	"log"
-	"net/http"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -37,12 +37,9 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// ルートを設定
-	e.GET("/", hello)
+	customerController := customer_controller.NewCostumerController(ctx, client.Database("testdb").Collection("customer"))
+	e.POST("/customer", customerController.Create)
 
 	// サーバーをポート番号1323で起動
 	e.Logger.Fatal(e.Start(":1323"))
-}
-
-func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!")
 }
