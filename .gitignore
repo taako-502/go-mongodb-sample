@@ -1,2 +1,4 @@
 go-mongodb-sample
 app/bin/
+pre_cmd.txt
+post_cmd.txt
