@@ -40,7 +40,8 @@ func main() {
 	// ルートを設定
 	customerController := customer_controller.NewCostumerController(ctx, client.Database("testdb").Collection("customer"))
 	e.POST("/customer", customerController.Create)
-	productController := product_controller.NewProductController(ctx, client.Database("testdb").Collection("product"))
+	productController := product_controller.NewProductController(connectionString, "testdb", "product")
+	e.GET("/product/:id", productController.FindOne)
 	e.POST("/product", productController.Create)
 	orderController := order_controller.NewOrderController(connectionString, "testdb", "order")
 	e.GET("/orders/:customer_id", orderController.FindByCustomerID)

@@ -2,28 +2,21 @@ package customer_controller
 
 import (
 	"context"
+	"errors"
 	product_infrastructure "go-mongodb-sample/app/infrastructures/products"
-	"time"
-
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/labstack/echo/v4"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type newCreate struct {
-	Name        string  `json:"name" validate:"required"`
-	Description string  `json:"description" validate:"required"`
-	Price       float64 `json:"price" validate:"required"`
-	Stock       int     `json:"stock" validate:"required"`
-	Category    string  `json:"category" validate:"required"`
-}
-
-func (pc ProductController) Create(c echo.Context) error {
-	request := new(newCreate)
-	if err := c.Bind(request); err != nil {
+func (pc ProductController) FindOne(c echo.Context) error {
+	ID, err := primitive.ObjectIDFromHex(c.Param("id"))
+	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
@@ -38,16 +31,12 @@ func (pc ProductController) Create(c echo.Context) error {
 
 	collection := client.Database(pc.DBName).Collection(pc.CollectionName)
 	pi := product_infrastructure.NewProduct(ctx, collection)
-	dto := product_infrastructure.NewProductDTO(
-		request.Name,
-		request.Description,
-		request.Price,
-		request.Stock,
-		request.Category,
-	)
-	product, err := pi.Create(dto)
-	if err != nil {
-		log.Fatal(err)
+	order, err := pi.FindOne(ID)
+	if errors.Is(err, product_infrastructure.ErrProductNotFound) {
+		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+	} else if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
-	return c.JSON(http.StatusOK, product)
+
+	return c.JSON(http.StatusOK, order)
 }

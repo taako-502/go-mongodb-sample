@@ -17,4 +17,5 @@ type Product struct {
 
 type Producter interface {
 	Create(dto *product_infrastructure.ProductDTO) (*product_infrastructure.ProductDTO, error)
+	findOne(id primitive.ObjectID) (*product_infrastructure.ProductDTO, error)
 }

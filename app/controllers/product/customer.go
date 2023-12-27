@@ -1,16 +1,11 @@
 package customer_controller
 
-import (
-	"context"
-
-	"go.mongodb.org/mongo-driver/mongo"
-)
-
 type ProductController struct {
-	Ctx        context.Context
-	Collection *mongo.Collection
+	ConnectionString string
+	DBName           string
+	CollectionName   string
 }
 
-func NewProductController(ctx context.Context, collection *mongo.Collection) ProductController {
-	return ProductController{Ctx: ctx, Collection: collection}
+func NewProductController(con string, DBName string, CollectionName string) ProductController {
+	return ProductController{ConnectionString: con, DBName: DBName, CollectionName: CollectionName}
 }
