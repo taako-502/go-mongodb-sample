@@ -6,8 +6,10 @@ import (
 	order_controller "go-mongodb-sample/app/controllers/order"
 	product_controller "go-mongodb-sample/app/controllers/product"
 	"log"
+	"os"
 	"time"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -18,6 +20,10 @@ import (
 const connectionString = "mongodb://localhost:27017"
 
 func main() {
+	if err := godotenv.Load(".env"); err != nil {
+		log.Printf("環境変数の読込に失敗しました: %v\r\n", err)
+	}
+
 	// コンテキストを設定
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -38,12 +44,13 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// ルートを設定
-	customerController := customer_controller.NewCostumerController(ctx, client.Database("testdb").Collection("customer"))
+	dbname := os.Getenv("DATABASE_NAME")
+	customerController := customer_controller.NewCostumerController(ctx, client.Database(dbname).Collection("customer"))
 	e.POST("/customer", customerController.Create)
-	productController := product_controller.NewProductController(connectionString, "testdb", "product")
+	productController := product_controller.NewProductController(connectionString, dbname, "product")
 	e.GET("/product/:id", productController.FindOne)
 	e.POST("/product", productController.Create)
-	orderController := order_controller.NewOrderController(connectionString, "testdb", "order")
+	orderController := order_controller.NewOrderController(connectionString, dbname, "order")
 	e.GET("/orders/:customer_id", orderController.FindByCustomerID)
 	e.POST("/order", orderController.Create)
 

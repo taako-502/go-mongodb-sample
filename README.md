@@ -5,6 +5,8 @@
 ```bash
 # MongoDBの起動
 docker run --name mongodb -d -p 27017:27017 mongo
+# コレクションに対してインデックスを作成
+go run app/migration/create_index.go
 # Echo API Serverの起動
 go run app/main.go
 ```
