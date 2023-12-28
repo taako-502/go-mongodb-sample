@@ -45,7 +45,7 @@ func main() {
 
 	// ルートを設定
 	dbname := os.Getenv("DATABASE_NAME")
-	customerController := customer_controller.NewCostumerController(ctx, client.Database(dbname).Collection("customer"))
+	customerController := customer_controller.NewCostumerController(connectionString, dbname, "customer")
 	e.POST("/customer", customerController.Create)
 	productController := product_controller.NewProductController(connectionString, dbname, "product")
 	e.GET("/product/:id", productController.FindOne)

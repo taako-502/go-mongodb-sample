@@ -3,7 +3,6 @@ package order_controller
 import (
 	"context"
 	"errors"
-	"log"
 	"net/http"
 	"time"
 
@@ -26,7 +25,7 @@ func (oo OrderController) FindByCustomerID(c echo.Context) error {
 	defer cancel()
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(oo.ConnectionString))
 	if err != nil {
-		log.Fatal(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 	defer client.Disconnect(ctx)
 

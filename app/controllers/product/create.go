@@ -1,11 +1,10 @@
-package customer_controller
+package product_controller
 
 import (
 	"context"
 	product_infrastructure "go-mongodb-sample/app/infrastructures/products"
 	"time"
 
-	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -32,7 +31,7 @@ func (pc ProductController) Create(c echo.Context) error {
 	defer cancel()
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(pc.ConnectionString))
 	if err != nil {
-		log.Fatal(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 	defer client.Disconnect(ctx)
 
@@ -47,7 +46,7 @@ func (pc ProductController) Create(c echo.Context) error {
 	)
 	product, err := pi.Create(dto)
 	if err != nil {
-		log.Fatal(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusOK, product)
 }

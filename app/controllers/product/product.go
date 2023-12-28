@@ -1,4 +1,4 @@
-package customer_controller
+package product_controller
 
 type ProductController struct {
 	ConnectionString string

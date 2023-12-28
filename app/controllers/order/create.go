@@ -2,7 +2,6 @@ package order_controller
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"time"
 
@@ -33,7 +32,7 @@ func (oo OrderController) Create(c echo.Context) error {
 	defer cancel()
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(oo.ConnectionString))
 	if err != nil {
-		log.Fatal(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 	defer client.Disconnect(ctx)
 
@@ -48,7 +47,7 @@ func (oo OrderController) Create(c echo.Context) error {
 	)
 	order, err := oi.Create(dto)
 	if err != nil {
-		log.Fatal(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	return c.JSON(http.StatusOK, order)

@@ -1,10 +1,9 @@
-package customer_controller
+package product_controller
 
 import (
 	"context"
 	"errors"
 	product_infrastructure "go-mongodb-sample/app/infrastructures/products"
-	"log"
 	"net/http"
 	"time"
 
@@ -25,7 +24,7 @@ func (pc ProductController) FindOne(c echo.Context) error {
 	defer cancel()
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(pc.ConnectionString))
 	if err != nil {
-		log.Fatal(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 	defer client.Disconnect(ctx)
 
