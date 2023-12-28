@@ -14,16 +14,28 @@ import (
 )
 
 type newCreate struct {
-	customerId   primitive.ObjectID
-	OrderDetails []order_infrastructure.OrderDetailDTO
-	OrderDate    time.Time
-	TotalAmount  float64
-	Status       string
+	CustomerId primitive.ObjectID `json:"customerId" validate:"required"`
+	// 2006-01-02
+	OrderDetails []orderDetail `json:"orderDetails" validate:"required"`
+	OrderDate    string        `json:"orderDate" validate:"required"`
+	TotalAmount  float64       `json:"totalAmount" validate:"required"`
+	Status       string        `json:"status" validate:"required"`
+}
+
+type orderDetail struct {
+	ProductID primitive.ObjectID `json:"productId" validate:"required"`
+	Quantity  int                `json:"quantity" validate:"required"`
+	Price     float64            `json:"price" validate:"required"`
 }
 
 func (oo OrderController) Create(c echo.Context) error {
 	request := new(newCreate)
 	if err := c.Bind(request); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	orderDate, err := time.Parse("2006-01-02", request.OrderDate)
+	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
@@ -38,10 +50,15 @@ func (oo OrderController) Create(c echo.Context) error {
 
 	collection := client.Database(oo.DBName).Collection(oo.CollectionName)
 	oi := order_infrastructure.NewOrderRepository(ctx, collection)
+	orderDetails := make([]order_infrastructure.OrderDetailDTO, len(request.OrderDetails))
+	for i, v := range request.OrderDetails {
+		d := order_infrastructure.NewOrderDetailDTO(v.ProductID, v.Quantity, v.Price)
+		orderDetails[i] = *d
+	}
 	dto := order_infrastructure.NewOrderDTO(
-		request.customerId,
-		request.OrderDetails,
-		request.OrderDate,
+		request.CustomerId,
+		orderDetails,
+		orderDate,
 		request.TotalAmount,
 		request.Status,
 	)
