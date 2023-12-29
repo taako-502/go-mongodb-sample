@@ -2,6 +2,7 @@ version: "3.8"
 services:
   mongodb:
     image: mongo
+    command: mongod --replSet rs0
     ports:
       - "27017:27017"
     volumes:

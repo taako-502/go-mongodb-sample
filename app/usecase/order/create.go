@@ -58,12 +58,9 @@ func (o OrderService) Create(dto CreateDTO) error {
 	defer session.EndSession(o.Ctx)
 
 	// トランザクションを開始
-	// NOTE: エラーになってもロールバックされない様子
 	if err = mongo.WithSession(o.Ctx, session, func(sc mongo.SessionContext) error {
-		// NOTE: 以下のコメントアウトをはずすとトランザクションが有効になるが、レプリカセットの設定が必要
-		// cc.Ctx = sc
-		// oi := order_infrastructure.NewOrderRepository(sc, client.Database(o.DBName).Collection("orders"))
-		oi := order_infrastructure.NewOrderRepository(o.Ctx, client.Database(o.DBName).Collection("orders"))
+		cc.Ctx = sc
+		oi := order_infrastructure.NewOrderRepository(sc, client.Database(o.DBName).Collection("orders"))
 
 		if err := sc.StartTransaction(); err != nil {
 			return errors.Wrap(err, "session.StartTransaction")
@@ -93,6 +90,11 @@ func (o OrderService) Create(dto CreateDTO) error {
 		// カスタマーのオーダー履歴を追加する
 		if err = cc.UpdateHistory(dto.CustomerID, createdOrder.ID); err != nil {
 			return errors.Wrap(err, "cc.UpdateHistory")
+		}
+
+		// コミット
+		if err = sc.CommitTransaction(sc); err != nil {
+			return errors.Wrap(err, "session.CommitTransaction")
 		}
 
 		return nil
