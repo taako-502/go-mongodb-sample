@@ -21,17 +21,17 @@ type OrderDTO struct {
 	Status       string             `bson:"status"`
 }
 
-func NewOrderDetailDTO(productId primitive.ObjectID, quantity int, price float64) *OrderDetailDTO {
+func NewOrderDetailDTO(productID primitive.ObjectID, quantity int, price float64) *OrderDetailDTO {
 	return &OrderDetailDTO{
-		ProductID: productId,
+		ProductID: productID,
 		Quantity:  quantity,
 		Price:     price,
 	}
 }
 
-func NewOrderDTO(customerId primitive.ObjectID, OrderDetails []OrderDetailDTO, OrderDate time.Time, TotalAmount float64, Status string) *OrderDTO {
+func NewOrderDTO(CustomerID primitive.ObjectID, OrderDetails []OrderDetailDTO, OrderDate time.Time, TotalAmount float64, Status string) *OrderDTO {
 	return &OrderDTO{
-		CustomerID:   customerId,
+		CustomerID:   CustomerID,
 		OrderDetails: OrderDetails,
 		OrderDate:    OrderDate,
 		TotalAmount:  TotalAmount,

@@ -45,12 +45,12 @@ func main() {
 
 	// ルートを設定
 	dbname := os.Getenv("DATABASE_NAME")
-	customerController := customer_controller.NewCostumerController(connectionString, dbname, "customer")
+	customerController := customer_controller.NewCostumerController(connectionString, dbname, "customers")
 	e.POST("/customer", customerController.Create)
-	productController := product_controller.NewProductController(connectionString, dbname, "product")
+	productController := product_controller.NewProductController(connectionString, dbname, "products")
 	e.GET("/product/:id", productController.FindOne)
 	e.POST("/product", productController.Create)
-	orderController := order_controller.NewOrderController(connectionString, dbname, "order")
+	orderController := order_controller.NewOrderController(connectionString, dbname, "orders")
 	e.GET("/orders/:customer_id", orderController.FindByCustomerID)
 	e.POST("/order", orderController.Create)
 

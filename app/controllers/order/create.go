@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	order_infrastructure "go-mongodb-sample/app/infrastructures/orders"
+	order_usecase "go-mongodb-sample/app/usecase/order"
 
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -18,7 +18,6 @@ type newCreate struct {
 	// 2006-01-02
 	OrderDetails []orderDetail `json:"orderDetails" validate:"required"`
 	OrderDate    string        `json:"orderDate" validate:"required"`
-	TotalAmount  float64       `json:"totalAmount" validate:"required"`
 	Status       string        `json:"status" validate:"required"`
 }
 
@@ -38,6 +37,21 @@ func (oo OrderController) Create(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
+	// TODO: DTOを作成する処理はメソッドに切り出す
+	orderDetails := make([]order_usecase.OrderDetailDTO, len(request.OrderDetails))
+	for i, v := range request.OrderDetails {
+		orderDetails[i] = order_usecase.OrderDetailDTO{
+			ProductID: v.ProductID,
+			Quantity:  v.Quantity,
+			Price:     v.Price,
+		}
+	}
+	dto := order_usecase.CreateDTO{
+		CustomerID:   request.CustomerId,
+		OrderDetails: orderDetails,
+		OrderDate:    orderDate,
+		Status:       request.Status,
+	}
 
 	// コンテキストを設定
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -48,24 +62,9 @@ func (oo OrderController) Create(c echo.Context) error {
 	}
 	defer client.Disconnect(ctx)
 
-	collection := client.Database(oo.DBName).Collection(oo.CollectionName)
-	oi := order_infrastructure.NewOrderRepository(ctx, collection)
-	orderDetails := make([]order_infrastructure.OrderDetailDTO, len(request.OrderDetails))
-	for i, v := range request.OrderDetails {
-		d := order_infrastructure.NewOrderDetailDTO(v.ProductID, v.Quantity, v.Price)
-		orderDetails[i] = *d
-	}
-	dto := order_infrastructure.NewOrderDTO(
-		request.CustomerId,
-		orderDetails,
-		orderDate,
-		request.TotalAmount,
-		request.Status,
-	)
-	order, err := oi.Create(dto)
-	if err != nil {
+	if err := order_usecase.Create(ctx, client.Database(oo.DBName), dto); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return c.JSON(http.StatusOK, order)
+	return c.String(http.StatusOK, "success")
 }

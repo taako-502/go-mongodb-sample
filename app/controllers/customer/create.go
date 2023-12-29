@@ -34,7 +34,7 @@ func (cc CostumerController) Create(c echo.Context) error {
 	defer client.Disconnect(ctx)
 
 	collection := client.Database(cc.DBName).Collection(cc.CollectionName)
-	ci := customer_infrastructure.NewCustomer(ctx, collection)
+	ci := customer_infrastructure.NewCustomerRepository(ctx, collection)
 	dto := customer_infrastructure.NewCustomerDTO(request.Name, request.Email, request.Address, nil)
 	customer, err := ci.Create(dto)
 	if err != nil {

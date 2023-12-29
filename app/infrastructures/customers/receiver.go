@@ -11,6 +11,6 @@ type Customer struct {
 	Collection *mongo.Collection
 }
 
-func NewCustomer(ctx context.Context, collection *mongo.Collection) Customer {
+func NewCustomerRepository(ctx context.Context, collection *mongo.Collection) Customer {
 	return Customer{Ctx: ctx, Collection: collection}
 }

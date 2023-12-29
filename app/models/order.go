@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	order_infrastructure "go-mongodb-sample/app/infrastructures/orders"
 	"time"
 
@@ -18,11 +19,39 @@ type Order struct {
 	CustomerID   primitive.ObjectID
 	OrderDetails []OrderDetail
 	OrderDate    time.Time
-	TotalAmount  float64
 	Status       string
 }
 
 type OrderAdapter interface {
 	Create(dto *order_infrastructure.OrderDTO) (*order_infrastructure.OrderDTO, error)
 	FindByCustomerID(customerID primitive.ObjectID) ([]order_infrastructure.OrderDTO, error)
+}
+
+func NewOrder(customerID primitive.ObjectID, orderDetails []OrderDetail, orderDate time.Time, status string) (*Order, error) {
+	if customerID == primitive.NilObjectID {
+		return nil, errors.New("customerId is required")
+	}
+	if len(orderDetails) == 0 {
+		return nil, errors.New("orderDetails is required")
+	}
+	if orderDate.IsZero() {
+		return nil, errors.New("orderDate is required")
+	}
+	if status == "" {
+		return nil, errors.New("status is required")
+	}
+	return &Order{
+		CustomerID:   customerID,
+		OrderDetails: orderDetails,
+		OrderDate:    orderDate,
+		Status:       status,
+	}, nil
+}
+
+func NewOrderDetail(productID primitive.ObjectID, quantity int, price float64) *OrderDetail {
+	return &OrderDetail{
+		ProductID: productID,
+		Quantity:  quantity,
+		Price:     price,
+	}
 }

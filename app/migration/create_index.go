@@ -26,7 +26,7 @@ func main() {
 
 	// コレクションの取得
 	dbname := os.Getenv("DATABASE_NAME")
-	collection := client.Database(dbname).Collection("customer")
+	collection := client.Database(dbname).Collection("customers")
 
 	// ユニークインデックスの設定
 	indexModel := mongo.IndexModel{
