@@ -66,6 +66,8 @@ func (o OrderService) Create(dto CreateDTO) error {
 			return errors.Wrap(err, "session.StartTransaction")
 		}
 
+		// TODO: 在庫数を更新する
+
 		// オーダーを永続化する
 		var totalAmount float64
 		newOrderDetails := make([]order_infrastructure.OrderDetailDTO, len(model.OrderDetails))
