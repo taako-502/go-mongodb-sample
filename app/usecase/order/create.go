@@ -31,7 +31,6 @@ func Create(ctx context.Context, DB *mongo.Database, dto CreateDTO) error {
 	// FIXME: ここでcollectionのインスタンスを作成するとユースケース層がDBに依存してしまう
 	oi := order_infrastructure.NewOrderRepository(ctx, DB.Collection("orders"))
 	cc := customer_infrastructure.NewCustomerRepository(ctx, DB.Collection("customers"))
-	// NOTE: ここでトランザクションがあるとよい
 	// dtoからmodelを作成する
 	detailsModel := make([]model.OrderDetail, len(dto.OrderDetails))
 	for i, v := range dto.OrderDetails {
@@ -45,6 +44,7 @@ func Create(ctx context.Context, DB *mongo.Database, dto CreateDTO) error {
 	if _, err := cc.Find(dto.CustomerID); err != nil {
 		return errors.Wrap(err, "cc.FindByID")
 	}
+	// NOTE: ここでトランザクションがあるとよい
 	// オーダーを永続化する
 	var totalAmount float64
 	newOrderDetails := make([]order_infrastructure.OrderDetailDTO, len(model.OrderDetails))
