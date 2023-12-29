@@ -28,6 +28,7 @@ type CreateDTO struct {
 }
 
 func Create(ctx context.Context, DB *mongo.Database, dto CreateDTO) error {
+	// FIXME: ここでcollectionのインスタンスを作成するとユースケース層がDBに依存してしまう
 	oi := order_infrastructure.NewOrderRepository(ctx, DB.Collection("orders"))
 	cc := customer_infrastructure.NewCustomerRepository(ctx, DB.Collection("customers"))
 	// NOTE: ここでトランザクションがあるとよい
