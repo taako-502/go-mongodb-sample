@@ -1,14 +1,11 @@
 package main
 
 import (
-	"context"
 	customer_controller "go-mongodb-sample/app/controllers/customer"
 	order_controller "go-mongodb-sample/app/controllers/order"
 	product_controller "go-mongodb-sample/app/controllers/product"
-	"go-mongodb-sample/app/internal/example"
 	"log"
 	"os"
-	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -23,12 +20,10 @@ func main() {
 		log.Printf("環境変数の読込に失敗しました: %v\r\n", err)
 	}
 
-	// コンテキストを設定
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
 	// サンプルを実行
-	example.Exammple(connectionString, ctx, "testdb")
+	// ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	// defer cancel()
+	//example.Exammple(connectionString, ctx, "testdb")
 
 	// インスタンスを作成
 	e := echo.New()
@@ -38,6 +33,7 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// ルートを設定
+	connectionString := os.Getenv("MONGO_CONNECTION_STRING")
 	dbname := os.Getenv("DATABASE_NAME")
 	customerController := customer_controller.NewCostumerController(connectionString, dbname, "customers")
 	e.POST("/customer", customerController.Create)
