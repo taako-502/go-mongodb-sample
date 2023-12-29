@@ -5,6 +5,7 @@ import (
 	customer_controller "go-mongodb-sample/app/controllers/customer"
 	order_controller "go-mongodb-sample/app/controllers/order"
 	product_controller "go-mongodb-sample/app/controllers/product"
+	"go-mongodb-sample/app/internal/example"
 	"log"
 	"os"
 	"time"
@@ -12,8 +13,6 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // MongoDBサーバーへの接続文字列
@@ -27,14 +26,9 @@ func main() {
 	// コンテキストを設定
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(connectionString))
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer client.Disconnect(ctx)
 
 	// サンプルを実行
-	// example.Exammple(connectionString, ctx, client, "testdb")
+	example.Exammple(connectionString, ctx, "testdb")
 
 	// インスタンスを作成
 	e := echo.New()

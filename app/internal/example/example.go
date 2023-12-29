@@ -10,9 +10,16 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func Exammple(connectionString string, ctx context.Context, client *mongo.Client, dbname string) {
+func Exammple(connectionString string, ctx context.Context, dbname string) {
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(connectionString))
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer client.Disconnect(ctx)
+
 	// カスタマーを作成
 	c := customer_infrastructure.NewCustomerRepository(ctx,
 		client.Database(dbname).Collection("customers"),

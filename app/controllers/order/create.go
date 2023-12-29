@@ -62,7 +62,8 @@ func (oo OrderController) Create(c echo.Context) error {
 	}
 	defer client.Disconnect(ctx)
 
-	if err := order_usecase.Create(ctx, client.Database(oo.DBName), dto); err != nil {
+	o := order_usecase.NewOrderService(ctx, oo.ConnectionString, client.Database(oo.DBName))
+	if err := o.Create(dto); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
