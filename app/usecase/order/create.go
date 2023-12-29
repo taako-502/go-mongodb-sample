@@ -61,8 +61,7 @@ func (o OrderService) Create(dto CreateDTO) error {
 	defer session.EndSession(context.Background())
 
 	// トランザクションを開始
-	if err = mongo.WithSession(context.Background(), session, func(sc mongo.SessionContext) error {
-		if err := session.StartTransaction(); err != nil {
+	// NOTE: エラーになってもロールバックされない様子
 			return errors.Wrap(err, "session.StartTransaction")
 		}
 
