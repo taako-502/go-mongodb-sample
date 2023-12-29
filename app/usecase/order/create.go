@@ -1,7 +1,6 @@
 package order_usecase
 
 import (
-	"context"
 	customer_infrastructure "go-mongodb-sample/app/infrastructures/customers"
 	order_infrastructure "go-mongodb-sample/app/infrastructures/orders"
 	model "go-mongodb-sample/app/models"
@@ -27,9 +26,6 @@ type CreateDTO struct {
 }
 
 func (o OrderService) Create(dto CreateDTO) error {
-	oi := order_infrastructure.NewOrderRepository(o.Ctx, o.DB.Collection("orders"))
-	cc := customer_infrastructure.NewCustomerRepository(o.Ctx, o.DB.Collection("customers"))
-
 	// dtoからmodelを作成する
 	detailsModel := make([]model.OrderDetail, len(dto.OrderDetails))
 	for i, v := range dto.OrderDetails {
@@ -40,11 +36,6 @@ func (o OrderService) Create(dto CreateDTO) error {
 		return errors.Wrap(err, "model.NewOrder")
 	}
 
-	// カスタマーが存在するか確認する
-	if _, err := cc.Find(dto.CustomerID); err != nil {
-		return errors.Wrap(err, "cc.FindByID")
-	}
-
 	// FIXME: ユースケース層がmongoDBのドライバーに依存している
 	// clientを作成
 	client, err := mongo.Connect(o.Ctx, options.Client().ApplyURI(o.ConnectionString))
@@ -53,18 +44,30 @@ func (o OrderService) Create(dto CreateDTO) error {
 	}
 	defer client.Disconnect(o.Ctx)
 
+	// カスタマーが存在するか確認する
+	cc := customer_infrastructure.NewCustomerRepository(o.Ctx, client.Database(o.DBName).Collection("customers"))
+	if _, err := cc.Find(dto.CustomerID); err != nil {
+		return errors.Wrap(err, "cc.FindByID")
+	}
+
 	// トランザクションを使用するためのセッションを開始
 	session, err := client.StartSession()
 	if err != nil {
 		return errors.Wrap(err, "client.StartSession")
 	}
-	defer session.EndSession(context.Background())
+	defer session.EndSession(o.Ctx)
 
 	// トランザクションを開始
 	// NOTE: エラーになってもロールバックされない様子
+	if err = mongo.WithSession(o.Ctx, session, func(sc mongo.SessionContext) error {
+		// NOTE: 以下のコメントアウトをはずすとトランザクションが有効になるが、レプリカセットの設定が必要
+		// cc.Ctx = sc
+		// oi := order_infrastructure.NewOrderRepository(sc, client.Database(o.DBName).Collection("orders"))
+		oi := order_infrastructure.NewOrderRepository(o.Ctx, client.Database(o.DBName).Collection("orders"))
+
+		if err := sc.StartTransaction(); err != nil {
 			return errors.Wrap(err, "session.StartTransaction")
 		}
-
 		// TODO: 在庫数を更新する
 
 		// オーダーを永続化する

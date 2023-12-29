@@ -9,8 +9,6 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type newCreate struct {
@@ -56,13 +54,8 @@ func (oo OrderController) Create(c echo.Context) error {
 	// コンテキストを設定
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(oo.ConnectionString))
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-	defer client.Disconnect(ctx)
 
-	o := order_usecase.NewOrderService(ctx, oo.ConnectionString, client.Database(oo.DBName))
+	o := order_usecase.NewOrderService(ctx, oo.ConnectionString, oo.DBName)
 	if err := o.Create(dto); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

@@ -2,20 +2,18 @@ package order_usecase
 
 import (
 	"context"
-
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type OrderService struct {
 	Ctx              context.Context
-	DB               *mongo.Database
+	DBName           string
 	ConnectionString string
 }
 
-func NewOrderService(ctx context.Context, connectionString string, DB *mongo.Database) *OrderService {
+func NewOrderService(ctx context.Context, connectionString string, DBName string) *OrderService {
 	return &OrderService{
 		Ctx:              ctx,
-		DB:               DB,
+		DBName:           DBName,
 		ConnectionString: connectionString,
 	}
 }
