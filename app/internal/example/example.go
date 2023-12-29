@@ -51,7 +51,7 @@ func Exammple(connectionString string, ctx context.Context, client *mongo.Client
 	fmt.Println("Inserted a single document: ", order)
 
 	// ドキュメントを取得するクエリ
-	findedCustomer, err := c.FindOne(customer.ID)
+	findedCustomer, err := c.Find(customer.ID)
 	if err != nil {
 		log.Fatal(err)
 	}

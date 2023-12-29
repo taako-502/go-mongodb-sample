@@ -39,7 +39,11 @@ func Create(ctx context.Context, DB *mongo.Database, dto CreateDTO) error {
 	}
 	model, err := model.NewOrder(dto.CustomerID, detailsModel, dto.OrderDate, dto.Status)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		return errors.Wrap(err, "model.NewOrder")
+	}
+	// カスタマーが存在するか確認する
+	if _, err := cc.Find(dto.CustomerID); err != nil {
+		return errors.Wrap(err, "cc.FindByID")
 	}
 	// オーダーを永続化する
 	var totalAmount float64
