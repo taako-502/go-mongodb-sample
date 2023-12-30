@@ -10,11 +10,11 @@ type CustomerDTO struct {
 	OrderHistory []primitive.ObjectID `bson:"order_history,omitempty"`
 }
 
-func NewCustomerDTO(name string, email string, address string, orderHistory []primitive.ObjectID) *CustomerDTO {
+func NewCustomerDTO(name string, email string, address string) *CustomerDTO {
 	return &CustomerDTO{
 		Name:         name,
 		Email:        email,
 		Address:      address,
-		OrderHistory: orderHistory,
+		OrderHistory: []primitive.ObjectID{},
 	}
 }

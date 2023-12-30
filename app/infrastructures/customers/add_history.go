@@ -7,13 +7,16 @@ import (
 )
 
 func (c Customer) UpdateHistory(ID primitive.ObjectID, orderID primitive.ObjectID) error {
-	_, err := c.Collection.UpdateByID(
-		c.Ctx,
-		bson.D{{Key: "_id", Value: ID}},
-		bson.D{{Key: "$push", Value: bson.D{{Key: "order_history", Value: orderID}}}},
-	)
+	update := bson.D{{Key: "$push", Value: bson.D{{Key: "order_history", Value: orderID}}}}
+	result, err := c.Collection.UpdateByID(c.Ctx, ID, update)
+
 	if err != nil {
 		return errors.Wrap(err, "c.Collection.UpdateByID")
 	}
+
+	if result.MatchedCount == 0 {
+		return ErrCustomerNotFound
+	}
+
 	return nil
 }

@@ -24,7 +24,7 @@ func Exammple(connectionString string, ctx context.Context, dbname string) {
 	c := customer_infrastructure.NewCustomerRepository(ctx,
 		client.Database(dbname).Collection("customers"),
 	)
-	dto := customer_infrastructure.NewCustomerDTO("Alice", "alice@gmail.com", "Tokyo", nil)
+	dto := customer_infrastructure.NewCustomerDTO("Alice", "alice@gmail.com", "Tokyo")
 	customer, err := c.Create(dto)
 	if err != nil {
 		log.Fatal(err)

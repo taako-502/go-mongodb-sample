@@ -35,7 +35,7 @@ func (cc CostumerController) Create(c echo.Context) error {
 
 	collection := client.Database(cc.DBName).Collection(cc.CollectionName)
 	ci := customer_infrastructure.NewCustomerRepository(ctx, collection)
-	dto := customer_infrastructure.NewCustomerDTO(request.Name, request.Email, request.Address, nil)
+	dto := customer_infrastructure.NewCustomerDTO(request.Name, request.Email, request.Address)
 	customer, err := ci.Create(dto)
 	if err != nil {
 		if errors.Is(err, customer_infrastructure.ErrCustomerDuplicate) {
