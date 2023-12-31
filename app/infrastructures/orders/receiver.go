@@ -11,6 +11,7 @@ type OrderRepository struct {
 	Collection *mongo.Collection
 }
 
-func NewOrderRepository(ctx context.Context, collection *mongo.Collection) OrderRepository {
+func NewOrderRepository(ctx context.Context, DB *mongo.Database) OrderRepository {
+	collection := DB.Collection("orders")
 	return OrderRepository{Ctx: ctx, Collection: collection}
 }

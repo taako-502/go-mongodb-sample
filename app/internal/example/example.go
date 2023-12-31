@@ -31,9 +31,7 @@ func Exammple(connectionString string, ctx context.Context, dbname string) {
 	fmt.Println("Inserted a single document: ", customer)
 
 	// プロダクトを作成
-	p := product_infrastructure.NewProduct(ctx,
-		client.Database(dbname).Collection("products"),
-	)
+	p := product_infrastructure.NewProduct(ctx, client.Database(dbname))
 	productDto := product_infrastructure.NewProductDTO("Apple", "iPhone", 100000, 10, "Smartphone")
 	product, err := p.Create(productDto)
 	if err != nil {
@@ -43,9 +41,7 @@ func Exammple(connectionString string, ctx context.Context, dbname string) {
 	fmt.Println("Inserted a single document: ", product)
 
 	// オーダーを作成
-	o := order_infrastructure.NewOrderRepository(ctx,
-		client.Database(dbname).Collection("orders"),
-	)
+	o := order_infrastructure.NewOrderRepository(ctx, client.Database(dbname))
 	orderDetailDto := order_infrastructure.NewOrderDetailDTO(product.ID, 100, 10000)
 	orderDto := order_infrastructure.NewOrderDTO(customer.ID, []order_infrastructure.OrderDetailDTO{*orderDetailDto}, time.Now(), 100, "created")
 	order, err := o.Create(orderDto)

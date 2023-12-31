@@ -60,7 +60,7 @@ func (o OrderService) Create(dto CreateDTO) error {
 	// トランザクションを開始
 	if err = mongo.WithSession(o.Ctx, session, func(sc mongo.SessionContext) error {
 		cc.Ctx = sc
-		oi := order_infrastructure.NewOrderRepository(sc, client.Database(o.DBName).Collection("orders"))
+		oi := order_infrastructure.NewOrderRepository(sc, client.Database(o.DBName))
 
 		if err := sc.StartTransaction(); err != nil {
 			return errors.Wrap(err, "session.StartTransaction")

@@ -26,7 +26,7 @@ func (c CustomerService) GetTotalAmountSpent(ID primitive.ObjectID) (float64, er
 		return 0, nil
 	}
 
-	or := order_infrastructure.NewOrderRepository(c.Ctx, client.Database(c.DBName).Collection("orders"))
+	or := order_infrastructure.NewOrderRepository(c.Ctx, client.Database(c.DBName))
 	amount, err := or.GetTotalAmountSpent(customer.OrderHistory)
 	if err != nil {
 		return 0, err

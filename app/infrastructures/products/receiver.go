@@ -11,6 +11,7 @@ type Producter struct {
 	Collection *mongo.Collection
 }
 
-func NewProduct(ctx context.Context, collection *mongo.Collection) Producter {
+func NewProduct(ctx context.Context, DB *mongo.Database) Producter {
+	collection := DB.Collection("products")
 	return Producter{Ctx: ctx, Collection: collection}
 }

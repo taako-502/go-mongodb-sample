@@ -28,8 +28,7 @@ func (pc ProductController) FindOne(c echo.Context) error {
 	}
 	defer client.Disconnect(ctx)
 
-	collection := client.Database(pc.DBName).Collection(pc.CollectionName)
-	pi := product_infrastructure.NewProduct(ctx, collection)
+	pi := product_infrastructure.NewProduct(ctx, client.Database(pc.DBName))
 	order, err := pi.FindOne(ID)
 	if errors.Is(err, product_infrastructure.ErrProductNotFound) {
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())

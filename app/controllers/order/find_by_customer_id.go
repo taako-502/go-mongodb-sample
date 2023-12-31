@@ -29,8 +29,7 @@ func (oo OrderController) FindByCustomerID(c echo.Context) error {
 	}
 	defer client.Disconnect(ctx)
 
-	collection := client.Database(oo.DBName).Collection("orders")
-	oi := order_infrastructure.NewOrderRepository(ctx, collection)
+	oi := order_infrastructure.NewOrderRepository(ctx, client.Database(oo.DBName))
 	order, err := oi.FindByCustomerID(customerID)
 	if errors.Is(err, order_infrastructure.ErrOrderNotFound) {
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())
