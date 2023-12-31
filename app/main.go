@@ -36,6 +36,7 @@ func main() {
 	connectionString := os.Getenv("MONGO_CONNECTION_STRING")
 	dbname := os.Getenv("DATABASE_NAME")
 	customerController := customer_controller.NewCostumerController(connectionString, dbname, "customers")
+	e.GET("/customer/:id/total-amount-spent", customerController.GetTotalAmountSpent)
 	e.POST("/customer", customerController.Create)
 	productController := product_controller.NewProductController(connectionString, dbname, "products")
 	e.GET("/product/:id", productController.FindOne)
