@@ -6,7 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (c Customer) UpdateHistory(ID primitive.ObjectID, orderID primitive.ObjectID) error {
+func (c OrderRepository) UpdateHistory(ID primitive.ObjectID, orderID primitive.ObjectID) error {
 	update := bson.D{{Key: "$push", Value: bson.D{{Key: "order_history", Value: orderID}}}}
 	result, err := c.Collection.UpdateByID(c.Ctx, ID, update)
 

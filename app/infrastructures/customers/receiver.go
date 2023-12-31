@@ -6,11 +6,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Customer struct {
+type OrderRepository struct {
 	Ctx        context.Context
 	Collection *mongo.Collection
 }
 
-func NewCustomerRepository(ctx context.Context, collection *mongo.Collection) Customer {
-	return Customer{Ctx: ctx, Collection: collection}
+func NewCustomerRepository(ctx context.Context, DB *mongo.Database) OrderRepository {
+	collection := DB.Collection("customers")
+	return OrderRepository{Ctx: ctx, Collection: collection}
 }

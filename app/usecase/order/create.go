@@ -45,7 +45,7 @@ func (o OrderService) Create(dto CreateDTO) error {
 	defer client.Disconnect(o.Ctx)
 
 	// カスタマーが存在するか確認する
-	cc := customer_infrastructure.NewCustomerRepository(o.Ctx, client.Database(o.DBName).Collection("customers"))
+	cc := customer_infrastructure.NewCustomerRepository(o.Ctx, client.Database(o.DBName))
 	if _, err := cc.Find(dto.CustomerID); err != nil {
 		return errors.Wrap(err, "cc.FindByID")
 	}

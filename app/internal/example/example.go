@@ -21,9 +21,7 @@ func Exammple(connectionString string, ctx context.Context, dbname string) {
 	defer client.Disconnect(ctx)
 
 	// カスタマーを作成
-	c := customer_infrastructure.NewCustomerRepository(ctx,
-		client.Database(dbname).Collection("customers"),
-	)
+	c := customer_infrastructure.NewCustomerRepository(ctx, client.Database(dbname))
 	dto := customer_infrastructure.NewCustomerDTO("Alice", "alice@gmail.com", "Tokyo")
 	customer, err := c.Create(dto)
 	if err != nil {
