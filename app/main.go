@@ -13,8 +13,6 @@ import (
 )
 
 // MongoDBサーバーへの接続文字列
-const connectionString = "mongodb://localhost:27017"
-
 func main() {
 	if err := godotenv.Load(".env"); err != nil {
 		log.Printf("環境変数の読込に失敗しました: %v\r\n", err)
@@ -44,6 +42,9 @@ func main() {
 	orderController := order_controller.NewOrderController(connectionString, dbname, "orders")
 	e.GET("/orders/:customer_id", orderController.FindByCustomerID)
 	e.POST("/order", orderController.Create)
+	e.GET("/hello", func(c echo.Context) error {
+		return c.String(200, "Hello World!")
+	})
 
 	// サーバーをポート番号1323で起動
 	e.Logger.Fatal(e.Start(":1323"))

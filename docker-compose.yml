@@ -1,5 +1,12 @@
 version: "3.8"
 services:
+  echo:
+    container_name: mongo_echo_server
+    build: .
+    ports:
+      - "1323:1323"
+    working_dir: /app
+    command: air
   mongodb:
     image: mongo
     command: mongod --replSet rs0
