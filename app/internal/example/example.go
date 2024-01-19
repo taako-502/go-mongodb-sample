@@ -31,7 +31,7 @@ func Exammple(connectionString string, ctx context.Context, dbname string) {
 	fmt.Println("Inserted a single document: ", customer)
 
 	// プロダクトを作成
-	p := product_infrastructure.NewProduct(ctx, client.Database(dbname))
+	p := product_infrastructure.NewProductRepository(ctx, client.Database(dbname))
 	productDto := product_infrastructure.NewProductDTO("Apple", "iPhone", 100000, 10, "Smartphone")
 	product, err := p.Create(productDto)
 	if err != nil {

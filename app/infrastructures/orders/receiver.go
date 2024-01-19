@@ -2,6 +2,7 @@ package order_infrastructure
 
 import (
 	"context"
+	"os"
 
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -12,6 +13,10 @@ type OrderRepository struct {
 }
 
 func NewOrderRepository(ctx context.Context, DB *mongo.Database) OrderRepository {
-	collection := DB.Collection("orders")
+	DBName := os.Getenv("ORDER_COLLECTION_NAME")
+	if DBName == "" {
+		DBName = "orders"
+	}
+	collection := DB.Collection(DBName)
 	return OrderRepository{Ctx: ctx, Collection: collection}
 }
