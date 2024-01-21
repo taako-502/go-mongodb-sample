@@ -5,8 +5,11 @@ services:
     build: .
     ports:
       - "1323:1323"
+    volumes:
+      - .:/app
+      - .env:/app/.env
     working_dir: /app
-    command: air
+    command: sh -c 'go mod tidy && air'
   mongodb:
     image: mongo
     command: mongod --replSet rs0

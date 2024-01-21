@@ -17,4 +17,5 @@ RUN go install github.com/cosmtrek/air@latest
 EXPOSE 1323
 
 # airでアプリケーションを起動
-CMD ["air"]
+CMD ["/go/bin/air"]
+
