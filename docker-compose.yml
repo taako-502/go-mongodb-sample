@@ -1,21 +1,23 @@
 version: "3.8"
 services:
-  echo:
-    container_name: mongo_echo_server
-    build: .
-    ports:
-      - "1323:1323"
-    volumes:
-      - .:/app
-      - .env:/app/.env
-    working_dir: /app
-    command: sh -c 'go mod tidy && air'
   mongodb:
+    container_name: mongo_db
     image: mongo
     command: mongod --replSet rs0
     ports:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+  # うまく動かないのでコメントアウト
+  # echo:
+  #   container_name: mongo_echo_server
+  #   build: .
+  #   ports:
+  #     - "1323:1323"
+  #   volumes:
+  #     - .:/app
+  #     - .env:/app/.env
+  #   working_dir: /app
+  #   command: sh -c 'go mod tidy && air'
 volumes:
   mongodb_data:

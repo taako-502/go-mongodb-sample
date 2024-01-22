@@ -3,7 +3,9 @@
 ## 環境構築
 
 ```bash
-# MongoDBの起動
+openssl rand -base64 756 > mongodb-keyfile
+chmod 400 mongodb-keyfile
+docker-compose build
 docker-compose up -d
 # コレクションに対してインデックスを作成
 go run app/migration/create_index.go
@@ -24,6 +26,11 @@ rs.initiate({
   _id: "rs0",
   members: [{ _id: 0, host: "localhost:27017" }],
 })
+```
+
+```
+rs.status()
+rs.initiate()
 ```
 
 ※
