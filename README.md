@@ -28,9 +28,18 @@ rs.initiate({
 })
 ```
 
-```
+```bash
 rs.status()
 rs.initiate()
+```
+
+testdb に接続する方法。
+レプリカの設定を以下のコマンドで行う必要がある。
+
+```bash
+var config = rs.conf();
+config.members[0].host = "mongo_db:27017";
+rs.reconfig(config, { force: true });
 ```
 
 ※
