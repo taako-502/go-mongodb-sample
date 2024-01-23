@@ -35,7 +35,7 @@ func (pc ProductController) Create(c echo.Context) error {
 	}
 	defer client.Disconnect(ctx)
 
-	pi := product_infrastructure.NewProduct(ctx, client.Database(pc.DBName))
+	pi := product_infrastructure.NewProductRepository(ctx, client.Database(pc.DBName))
 	dto := product_infrastructure.NewProductDTO(
 		request.Name,
 		request.Description,

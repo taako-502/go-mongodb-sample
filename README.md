@@ -3,7 +3,9 @@
 ## 環境構築
 
 ```bash
-# MongoDBの起動
+openssl rand -base64 756 > mongodb-keyfile
+chmod 400 mongodb-keyfile
+docker-compose build
 docker-compose up -d
 # コレクションに対してインデックスを作成
 go run app/migration/create_index.go
@@ -24,6 +26,20 @@ rs.initiate({
   _id: "rs0",
   members: [{ _id: 0, host: "localhost:27017" }],
 })
+```
+
+```bash
+rs.status()
+rs.initiate()
+```
+
+testdb に接続する方法。
+レプリカの設定を以下のコマンドで行う必要がある。
+
+```bash
+var config = rs.conf();
+config.members[0].host = "mongo_db:27017";
+rs.reconfig(config, { force: true });
 ```
 
 ※

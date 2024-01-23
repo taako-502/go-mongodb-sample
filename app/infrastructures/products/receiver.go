@@ -2,16 +2,21 @@ package product_infrastructure
 
 import (
 	"context"
+	"os"
 
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Producter struct {
+type ProductRepository struct {
 	Ctx        context.Context
 	Collection *mongo.Collection
 }
 
-func NewProduct(ctx context.Context, DB *mongo.Database) Producter {
-	collection := DB.Collection("products")
-	return Producter{Ctx: ctx, Collection: collection}
+func NewProductRepository(ctx context.Context, DB *mongo.Database) ProductRepository {
+	DBName := os.Getenv("PRODUCT_COLLECTION_NAME")
+	if DBName == "" {
+		DBName = "products"
+	}
+	collection := DB.Collection(DBName)
+	return ProductRepository{Ctx: ctx, Collection: collection}
 }

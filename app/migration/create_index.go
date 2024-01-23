@@ -18,7 +18,8 @@ func main() {
 	}
 
 	// MongoDBクライアントのセットアップ
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
+	connectionString := os.Getenv("MONGO_CONNECTION_STRING")
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(connectionString))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -26,7 +27,8 @@ func main() {
 
 	// コレクションの取得
 	dbname := os.Getenv("DATABASE_NAME")
-	collection := client.Database(dbname).Collection("customers")
+	customerDatabaseName := os.Getenv("CUSTOMER_COLLECTION_NAME")
+	collection := client.Database(dbname).Collection(customerDatabaseName)
 
 	// ユニークインデックスの設定
 	indexModel := mongo.IndexModel{
