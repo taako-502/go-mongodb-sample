@@ -10,6 +10,8 @@ import (
 	migrate "github.com/xakep666/mongo-migrate"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+
+	_ "go-mongodb-sample/migrations"
 )
 
 func main() {

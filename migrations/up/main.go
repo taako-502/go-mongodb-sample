@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 
+	_ "go-mongodb-sample/migrations"
+
 	"github.com/joho/godotenv"
 	migrate "github.com/xakep666/mongo-migrate"
 	"go.mongodb.org/mongo-driver/mongo"
