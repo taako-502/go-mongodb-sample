@@ -1,2 +1,5 @@
 up:
-	go run bat/main.go
+	go run migrations/up/main.go
+
+down:
+	go run migrations/down/main.go
