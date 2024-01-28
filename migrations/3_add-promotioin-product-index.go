@@ -14,7 +14,7 @@ func init() {
 	migrate.Register(func(db *mongo.Database) error {
 		if _, err := db.Collection(os.Getenv("PRODUCT_COLLECTION_NAME")).Indexes().CreateOne(context.TODO(), mongo.IndexModel{
 			Keys:    bson.D{{Key: "promotion_expires_at", Value: 1}},
-			Options: options.Index().SetExpireAfterSeconds(0),
+			Options: options.Index().SetExpireAfterSeconds(0), // TTL index
 		}); err != nil {
 			return err
 		}
