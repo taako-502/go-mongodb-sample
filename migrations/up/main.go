@@ -29,7 +29,8 @@ func main() {
 	db := client.Database(dbname)
 	migrate.SetDatabase(db)
 
-	if err := migrate.Up(migrate.AllAvailable); err != nil {
+	one := 1 // 1つ後のバージョンに進める
+	if err := migrate.Up(one); err != nil {
 		log.Fatal(err)
 	}
 
