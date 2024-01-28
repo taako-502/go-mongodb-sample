@@ -1,5 +1,11 @@
 # Migrations
 
+## データベースの最新化
+
+```bash
+$ make latest
+```
+
 ## バージョンアップ
 
 ```bash
