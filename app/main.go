@@ -39,6 +39,7 @@ func main() {
 	productController := product_controller.NewProductController(connectionString, dbname, "products")
 	e.GET("/product/:id", productController.FindOne)
 	e.POST("/product", productController.Create)
+	e.POST("/product/promotions", productController.CreatePromotion)
 	orderController := order_controller.NewOrderController(connectionString, dbname, "orders")
 	e.GET("/orders/:customer_id", orderController.FindByCustomerID)
 	e.POST("/order", orderController.Create)

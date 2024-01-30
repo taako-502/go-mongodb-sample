@@ -6,7 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (c ProductRepository) FindOne(id primitive.ObjectID) (*ProductDTO, error) {
+func (c *ProductReciever) FindOne(id primitive.ObjectID) (*ProductDTO, error) {
 	var dto *ProductDTO
 	if err := c.Collection.FindOne(c.Ctx, bson.D{{Key: "_id", Value: id}}).Decode(&dto); err != nil {
 		return nil, errors.Wrap(err, "c.Collection.FindOne")
