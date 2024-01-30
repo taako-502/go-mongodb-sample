@@ -13,7 +13,7 @@ type productlDTO struct {
 	Price              float64
 	Stock              int
 	Category           string
-	PromotionExpiresAt time.Time
+	PromotionExpiresAt *time.Time
 }
 
 func NewPromotionProductDTO(
@@ -22,7 +22,7 @@ func NewPromotionProductDTO(
 	price float64,
 	stock int,
 	category string,
-	promotionExpiresAt time.Time,
+	promotionExpiresAt *time.Time,
 ) *productlDTO {
 	return &productlDTO{
 		Name:               name,

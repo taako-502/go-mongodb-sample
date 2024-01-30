@@ -10,17 +10,28 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type newCreatePromotion struct {
-	Name               string    `json:"name" validate:"required"`
-	Description        string    `json:"description" validate:"required"`
-	Price              float64   `json:"price" validate:"required"`
-	Stock              int       `json:"stock" validate:"required"`
-	Category           string    `json:"category" validate:"required"`
-	PromotionExpiresAt time.Time `json:"promotionExpiresAt" validate:"required"`
+	Name               string     `json:"name" validate:"required"`
+	Description        string     `json:"description" validate:"required"`
+	Price              float64    `json:"price" validate:"required"`
+	Stock              int        `json:"stock" validate:"required"`
+	Category           string     `json:"category" validate:"required"`
+	PromotionExpiresAt *time.Time `json:"promotionExpiresAt" validate:"required"`
+}
+
+type response struct {
+	ID                 primitive.ObjectID
+	Name               string
+	Description        string
+	Price              float64
+	Stock              int
+	Category           string
+	PromotionExpiresAt *time.Time
 }
 
 func (pc ProductController) CreatePromotion(c echo.Context) error {
@@ -48,9 +59,20 @@ func (pc ProductController) CreatePromotion(c echo.Context) error {
 		request.Category,
 		request.PromotionExpiresAt,
 	)
-	if err := pu.CreatePromotion(pi, dto); err != nil {
+	result, err := pu.CreatePromotion(pi, dto)
+	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return c.JSON(http.StatusOK, "success")
+	response := response{
+		ID:                 result.ID,
+		Name:               result.Name,
+		Description:        result.Description,
+		Price:              result.Price,
+		Stock:              result.Stock,
+		Category:           result.Category,
+		PromotionExpiresAt: result.PromotionExpiresAt,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }

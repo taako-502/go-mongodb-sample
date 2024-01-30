@@ -4,14 +4,8 @@ import (
 	"context"
 	"os"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
-
-type ProductRepository interface {
-	Create(dto *ProductDTO) (*ProductDTO, error)
-	FindOne(id primitive.ObjectID) (*ProductDTO, error)
-}
 
 type ProductReciever struct {
 	Ctx        context.Context

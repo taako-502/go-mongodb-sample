@@ -27,13 +27,13 @@ func NewProductDTO(name string, description string, price float64, stock int, ca
 	}
 }
 
-func NewPromotionProductDTO(name string, description string, price float64, stock int, category string, promotionExpiresAt time.Time) *ProductDTO {
+func NewPromotionProductDTO(name string, description string, price float64, stock int, category string, promotionExpiresAt *time.Time) *ProductDTO {
 	return &ProductDTO{
 		Name:               name,
 		Description:        description,
 		Price:              price,
 		Stock:              stock,
 		Category:           category,
-		PromotionExpiresAt: &promotionExpiresAt,
+		PromotionExpiresAt: promotionExpiresAt,
 	}
 }

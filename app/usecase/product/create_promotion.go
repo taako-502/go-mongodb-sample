@@ -2,22 +2,41 @@ package product_usecase
 
 import (
 	product_infrastructure "go-mongodb-sample/app/infrastructures/products"
+	model "go-mongodb-sample/app/models"
 
 	"github.com/pkg/errors"
 )
 
-func (p ProductService) CreatePromotion(c product_infrastructure.ProductRepository, product *productlDTO) error {
-	dto := product_infrastructure.NewPromotionProductDTO(
-		product.Name,
-		product.Description,
-		product.Price,
-		product.Stock,
-		product.Category,
-		product.PromotionExpiresAt,
+func (p ProductService) CreatePromotion(c model.ProductAdapter, dto *productlDTO) (*productlDTO, error) {
+	model, err := model.NewProduct(
+		dto.ID,
+		dto.Name,
+		dto.Description,
+		dto.Price,
+		dto.Stock,
+		dto.Category,
+		dto.PromotionExpiresAt,
+	)
+	if err != nil {
+		return nil, errors.Wrap(err, "model.NewProduct")
+	}
+
+	product := product_infrastructure.NewPromotionProductDTO(
+		model.Name,
+		model.Description,
+		model.Price,
+		model.Stock,
+		model.Category,
+		model.PromotionExpiresAt,
 	)
 
-	if _, err := c.Create(dto); err != nil {
-		return errors.Wrap(err, "c.Create")
+	createdDto, err := c.Create(product)
+	if err != nil {
+		return nil, errors.Wrap(err, "c.Create")
 	}
-	return nil
+
+	result := dto
+	result.ID = createdDto.ID
+
+	return result, nil
 }

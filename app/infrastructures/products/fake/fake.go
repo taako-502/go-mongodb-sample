@@ -1,24 +1,27 @@
-package product_infrastructure
+package product_infrastructure_fake
 
 import (
+	product_infrastructure "go-mongodb-sample/app/infrastructures/products"
+	model "go-mongodb-sample/app/models"
+
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type fakeProductRepository struct {
-	insertProduct map[*ProductDTO]error
-	findProduct   *ProductDTO
+	insertProduct map[*product_infrastructure.ProductDTO]error
+	findProduct   *product_infrastructure.ProductDTO
 }
 
-func NewFakeProductRepository() ProductRepository {
-	productMap := make(map[*ProductDTO]error)
+func NewFakeProductRepository() model.ProductAdapter {
+	productMap := make(map[*product_infrastructure.ProductDTO]error)
 	return &fakeProductRepository{
 		insertProduct: productMap,
 		findProduct:   nil,
 	}
 }
 
-func (r *fakeProductRepository) Create(dto *ProductDTO) (*ProductDTO, error) {
+func (r *fakeProductRepository) Create(dto *product_infrastructure.ProductDTO) (*product_infrastructure.ProductDTO, error) {
 	if dto.Name == "error" {
 		// エラーパターンのテスト用
 		return nil, errors.New("test error")
@@ -26,9 +29,7 @@ func (r *fakeProductRepository) Create(dto *ProductDTO) (*ProductDTO, error) {
 	if err, exists := r.insertProduct[dto]; exists {
 		return nil, errors.Wrap(err, "fakeUserRepository.insertUser")
 	}
-	_id := primitive.NewObjectID()
-	result := &ProductDTO{
-		ID:          _id,
+	result := &product_infrastructure.ProductDTO{
 		Name:        dto.Name,
 		Description: dto.Description,
 		Price:       dto.Price,
@@ -39,7 +40,7 @@ func (r *fakeProductRepository) Create(dto *ProductDTO) (*ProductDTO, error) {
 	return result, nil
 }
 
-func (r *fakeProductRepository) FindOne(id primitive.ObjectID) (*ProductDTO, error) {
+func (r *fakeProductRepository) FindOne(id primitive.ObjectID) (*product_infrastructure.ProductDTO, error) {
 	product := r.findProduct
 	product.ID = id
 	return product, nil
