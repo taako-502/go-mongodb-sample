@@ -41,7 +41,10 @@ func TestProductService_CreatePromotion(t *testing.T) {
 			},
 			wantErr: false,
 		}, {
-			name: "正常系", args: args{dto: &productlDTO{Name: "error"}},
+			name: "バリデーションエラー：名前が空白", args: args{dto: &productlDTO{Name: "", Price: 100, Stock: 100, Category: "error"}},
+			wantErr: true,
+		}, {
+			name: "MongoDBによるエラーが発生", args: args{dto: &productlDTO{Name: "error", Price: 100, Stock: 100, Category: "error"}},
 			wantErr: true,
 		},
 	}
