@@ -5,7 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (c ProductRepository) Create(dto *ProductDTO) (*ProductDTO, error) {
+func (c *ProductReciever) Create(dto *ProductDTO) (*ProductDTO, error) {
 	result, err := c.Collection.InsertOne(c.Ctx, dto)
 	if err != nil {
 		return nil, errors.Wrap(err, "c.Collection.InsertOne")
