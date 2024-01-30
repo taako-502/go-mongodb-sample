@@ -6,7 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type ProductlDTO struct {
+type productlDTO struct {
 	ID                 primitive.ObjectID
 	Name               string
 	Description        string
@@ -23,8 +23,8 @@ func NewPromotionProductDTO(
 	stock int,
 	category string,
 	promotionExpiresAt time.Time,
-) *ProductlDTO {
-	return &ProductlDTO{
+) *productlDTO {
+	return &productlDTO{
 		Name:               name,
 		Description:        description,
 		Price:              price,

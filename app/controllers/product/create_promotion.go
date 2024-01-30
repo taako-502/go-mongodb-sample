@@ -41,7 +41,7 @@ func (pc ProductController) CreatePromotion(c echo.Context) error {
 	defer client.Disconnect(ctx)
 
 	pi := product_infrastructure.NewProductRepository(ctx, client.Database(pc.DBName))
-	pu := product_usecase.NewProductService(ctx, pc.ConnectionString, pc.DBName)
+	pu := product_usecase.NewProductService()
 	dto := product_usecase.NewPromotionProductDTO(
 		request.Name,
 		request.Description,

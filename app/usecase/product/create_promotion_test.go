@@ -8,7 +8,7 @@ import (
 
 func TestProductService_CreatePromotion(t *testing.T) {
 	type args struct {
-		product *ProductlDTO
+		product *productlDTO
 	}
 	tests := []struct {
 		name    string
@@ -18,7 +18,7 @@ func TestProductService_CreatePromotion(t *testing.T) {
 		{
 			name: "正常系",
 			args: args{
-				product: &ProductlDTO{
+				product: &productlDTO{
 					Name:               "test",
 					Description:        "test",
 					Price:              100,
@@ -30,18 +30,14 @@ func TestProductService_CreatePromotion(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "正常系", args: args{product: &ProductlDTO{Name: "error"}},
+			name: "正常系", args: args{product: &productlDTO{Name: "error"}},
 			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			fake := product_infrastructure.NewFakeProductRepository()
-			p := ProductService{
-				Ctx:              nil,
-				DBName:           "",
-				ConnectionString: "",
-			}
+			p := NewProductService()
 			if err := p.CreatePromotion(fake, tt.args.product); (err != nil) != tt.wantErr {
 				t.Errorf("ProductService.CreatePromotion() error = %v, wantErr %v", err, tt.wantErr)
 			}

@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (p ProductService) CreatePromotion(c product_infrastructure.ProductRepository, product *ProductlDTO) error {
+func (p ProductService) CreatePromotion(c product_infrastructure.ProductRepository, product *productlDTO) error {
 	dto := product_infrastructure.NewPromotionProductDTO(
 		product.Name,
 		product.Description,
