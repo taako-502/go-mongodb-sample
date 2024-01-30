@@ -29,8 +29,6 @@ func (pc ProductController) CreatePromotion(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	// TODO: タイムアウトしないようにした方がいいか検討
-	// NOTE: タイムアウトさせないならcontext.TODOを使えばよい？
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
