@@ -27,7 +27,7 @@ func (o OrderService) Create(tm *infrastructures.MongoTransactionManager, cc *cu
 	}
 
 	// トランザクションを使用するためのセッションを開始
-	session, err := tm.Client.StartSession()
+	session, err := tm.StartSession()
 	if err != nil {
 		return errors.Wrap(err, "client.StartSession")
 	}

@@ -9,3 +9,7 @@ type MongoTransactionManager struct {
 func NewMongoTransactionManager(client *mongo.Client) *MongoTransactionManager {
 	return &MongoTransactionManager{Client: client}
 }
+
+func (tm *MongoTransactionManager) StartSession() (mongo.Session, error) {
+	return tm.Client.StartSession()
+}
