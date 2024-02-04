@@ -34,7 +34,7 @@ func (o OrderService) Create(tm *infrastructures.MongoTransactionManager, cc *cu
 	defer session.EndSession(o.Ctx)
 
 	// トランザクションを開始
-	if err = mongo.WithSession(o.Ctx, session, func(sc mongo.SessionContext) error {
+	if err = tm.WithSession(o.Ctx, session, func(sc mongo.SessionContext) error {
 		cc.Ctx = sc
 		oi := order_infrastructure.NewOrderRepository(sc, tm.Client.Database(o.DBName))
 
