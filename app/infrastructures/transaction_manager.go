@@ -3,6 +3,7 @@ package infrastructures
 import (
 	"context"
 
+	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -18,6 +19,23 @@ func (tm *MongoTransactionManager) StartSession() (mongo.Session, error) {
 	return tm.Client.StartSession()
 }
 
-func (tm *MongoTransactionManager) WithSession(ctx context.Context, sess mongo.Session, fn func(sc mongo.SessionContext) error) error {
-	return mongo.WithSession(ctx, sess, fn)
+func (tm *MongoTransactionManager) WithSession(
+	ctx context.Context,
+	sess mongo.Session,
+	fn func(sc context.Context) error) error {
+	return mongo.WithSession(ctx, sess, func(sc mongo.SessionContext) error {
+		if err := sc.StartTransaction(); err != nil {
+			return errors.Wrap(err, "sc.StartTransaction()")
+		}
+
+		if err := fn(sc); err != nil {
+			return errors.Wrap(err, "fn(mongo.SessionContext)")
+		}
+
+		if erro := sc.CommitTransaction(sc); erro != nil {
+			return errors.Wrap(erro, "sc.CommitTransaction(sc)")
+		}
+
+		return nil
+	})
 }

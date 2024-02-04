@@ -1,13 +1,13 @@
 package order_usecase
 
 import (
+	"context"
 	"go-mongodb-sample/app/infrastructures"
 	customer_infrastructure "go-mongodb-sample/app/infrastructures/customers"
 	order_infrastructure "go-mongodb-sample/app/infrastructures/orders"
 	model "go-mongodb-sample/app/models"
 
 	"github.com/pkg/errors"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func (o OrderService) Create(tm *infrastructures.MongoTransactionManager, cc *customer_infrastructure.OrderRepository, dto CreateDTO) error {
@@ -34,15 +34,8 @@ func (o OrderService) Create(tm *infrastructures.MongoTransactionManager, cc *cu
 	defer session.EndSession(o.Ctx)
 
 	// トランザクションを開始
-	if err = tm.WithSession(o.Ctx, session, func(sc mongo.SessionContext) error {
-		cc.Ctx = sc
-		oi := order_infrastructure.NewOrderRepository(sc, tm.Client.Database(o.DBName))
-
-		if err := sc.StartTransaction(); err != nil {
-			return errors.Wrap(err, "session.StartTransaction")
-		}
+	if err = tm.WithSession(o.Ctx, session, func(ctx context.Context) error {
 		// TODO: 在庫数を更新する
-
 		// オーダーを永続化する
 		var totalAmount float64
 		newOrderDetails := make([]order_infrastructure.OrderDetailDTO, len(model.OrderDetails))
@@ -58,6 +51,7 @@ func (o OrderService) Create(tm *infrastructures.MongoTransactionManager, cc *cu
 			totalAmount,
 			model.Status,
 		)
+		oi := order_infrastructure.NewOrderRepository(ctx, tm.Client.Database(o.DBName))
 		createdOrder, err := oi.Create(newOrder)
 		if err != nil {
 			return errors.Wrap(err, "oi.Create")
@@ -66,11 +60,6 @@ func (o OrderService) Create(tm *infrastructures.MongoTransactionManager, cc *cu
 		// カスタマーのオーダー履歴を追加する
 		if err = cc.UpdateHistory(dto.CustomerID, createdOrder.ID); err != nil {
 			return errors.Wrap(err, "cc.UpdateHistory")
-		}
-
-		// コミット
-		if err = sc.CommitTransaction(sc); err != nil {
-			return errors.Wrap(err, "session.CommitTransaction")
 		}
 
 		return nil
