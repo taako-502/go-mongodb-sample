@@ -4,26 +4,11 @@ import (
 	customer_infrastructure "go-mongodb-sample/app/infrastructures/customers"
 	order_infrastructure "go-mongodb-sample/app/infrastructures/orders"
 	model "go-mongodb-sample/app/models"
-	"time"
 
 	"github.com/pkg/errors"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
-type OrderDetailDTO struct {
-	ProductID primitive.ObjectID
-	Quantity  int
-	Price     float64
-}
-
-type CreateDTO struct {
-	CustomerID   primitive.ObjectID
-	OrderDetails []OrderDetailDTO
-	OrderDate    time.Time
-	Status       string
-}
 
 func (o OrderService) Create(dto CreateDTO) error {
 	// dtoからmodelを作成する
