@@ -1,16 +1,16 @@
 package order_usecase
 
 import (
+	"go-mongodb-sample/app/infrastructures"
 	customer_infrastructure "go-mongodb-sample/app/infrastructures/customers"
 	order_infrastructure "go-mongodb-sample/app/infrastructures/orders"
 	model "go-mongodb-sample/app/models"
 
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (o OrderService) Create(dto CreateDTO) error {
+func (o OrderService) Create(tm *infrastructures.MongoTransactionManager, cc *customer_infrastructure.OrderRepository, dto CreateDTO) error {
 	// dtoからmodelを作成する
 	detailsModel := make([]model.OrderDetail, len(dto.OrderDetails))
 	for i, v := range dto.OrderDetails {
@@ -21,22 +21,13 @@ func (o OrderService) Create(dto CreateDTO) error {
 		return errors.Wrap(err, "model.NewOrder")
 	}
 
-	// FIXME: ユースケース層がmongoDBのドライバーに依存している
-	// clientを作成
-	client, err := mongo.Connect(o.Ctx, options.Client().ApplyURI(o.ConnectionString))
-	if err != nil {
-		return errors.Wrap(err, "mongo.Connect")
-	}
-	defer client.Disconnect(o.Ctx)
-
 	// カスタマーが存在するか確認する
-	cc := customer_infrastructure.NewCustomerRepository(o.Ctx, client.Database(o.DBName))
 	if _, err := cc.Find(dto.CustomerID); err != nil {
 		return errors.Wrap(err, "cc.FindByID")
 	}
 
 	// トランザクションを使用するためのセッションを開始
-	session, err := client.StartSession()
+	session, err := tm.Client.StartSession()
 	if err != nil {
 		return errors.Wrap(err, "client.StartSession")
 	}
@@ -45,7 +36,7 @@ func (o OrderService) Create(dto CreateDTO) error {
 	// トランザクションを開始
 	if err = mongo.WithSession(o.Ctx, session, func(sc mongo.SessionContext) error {
 		cc.Ctx = sc
-		oi := order_infrastructure.NewOrderRepository(sc, client.Database(o.DBName))
+		oi := order_infrastructure.NewOrderRepository(sc, tm.Client.Database(o.DBName))
 
 		if err := sc.StartTransaction(); err != nil {
 			return errors.Wrap(err, "session.StartTransaction")
