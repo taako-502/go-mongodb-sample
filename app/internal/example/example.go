@@ -3,9 +3,9 @@ package example
 import (
 	"context"
 	"fmt"
-	customer_infrastructure "go-mongodb-sample/app/infrastructures/customers"
-	order_infrastructure "go-mongodb-sample/app/infrastructures/orders"
-	product_infrastructure "go-mongodb-sample/app/infrastructures/products"
+	customer_infrastructure "go-mongodb-sample/app/infrastructure/customers"
+	order_infrastructure "go-mongodb-sample/app/infrastructure/orders"
+	product_infrastructure "go-mongodb-sample/app/infrastructure/products"
 	"log"
 	"time"
 

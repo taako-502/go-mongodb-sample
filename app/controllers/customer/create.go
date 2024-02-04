@@ -3,7 +3,7 @@ package customer_controller
 import (
 	"context"
 	"errors"
-	customer_infrastructure "go-mongodb-sample/app/infrastructures/customers"
+	customer_infrastructure "go-mongodb-sample/app/infrastructure/customers"
 	"net/http"
 	"time"
 

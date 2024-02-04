@@ -1,7 +1,7 @@
 package product_usecase
 
 import (
-	product_infrastructure_fake "go-mongodb-sample/app/infrastructures/products/fake"
+	product_infrastructure_fake "go-mongodb-sample/app/infrastructure/products/fake"
 	"reflect"
 	"testing"
 	"time"

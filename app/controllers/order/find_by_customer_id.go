@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	order_infrastructure "go-mongodb-sample/app/infrastructures/orders"
+	order_infrastructure "go-mongodb-sample/app/infrastructure/orders"
 
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson/primitive"

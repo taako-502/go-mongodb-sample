@@ -2,7 +2,7 @@ package model
 
 import (
 	"errors"
-	order_infrastructure "go-mongodb-sample/app/infrastructures/orders"
+	order_infrastructure "go-mongodb-sample/app/infrastructure/orders"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"

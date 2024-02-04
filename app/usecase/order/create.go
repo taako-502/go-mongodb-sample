@@ -2,15 +2,15 @@ package order_usecase
 
 import (
 	"context"
-	"go-mongodb-sample/app/infrastructures"
-	customer_infrastructure "go-mongodb-sample/app/infrastructures/customers"
-	order_infrastructure "go-mongodb-sample/app/infrastructures/orders"
-	model "go-mongodb-sample/app/models"
+	"go-mongodb-sample/app/infrastructure"
+	customer_infrastructure "go-mongodb-sample/app/infrastructure/customers"
+	order_infrastructure "go-mongodb-sample/app/infrastructure/orders"
+	"go-mongodb-sample/app/model"
 
 	"github.com/pkg/errors"
 )
 
-func (o OrderService) Create(tm *infrastructures.MongoTransactionManager, cc *customer_infrastructure.OrderRepository, dto CreateDTO) error {
+func (o OrderService) Create(tm *infrastructure.MongoTransactionManager, cc *customer_infrastructure.OrderRepository, dto CreateDTO) error {
 	// dtoからmodelを作成する
 	detailsModel := make([]model.OrderDetail, len(dto.OrderDetails))
 	for i, v := range dto.OrderDetails {
