@@ -52,7 +52,7 @@ func Exammple(connectionString string, ctx context.Context, dbname string) {
 	fmt.Println("Inserted a single document: ", order)
 
 	// ドキュメントを取得するクエリ
-	findedCustomer, err := c.Find(customer.ID)
+	findedCustomer, err := c.FindOne(customer.ID)
 	if err != nil {
 		log.Fatal(err)
 	}

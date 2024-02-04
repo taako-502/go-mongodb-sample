@@ -22,7 +22,7 @@ func (o OrderService) Create(tm *infrastructure.MongoTransactionManager, cc *cus
 	}
 
 	// カスタマーが存在するか確認する
-	if _, err := cc.Find(dto.CustomerID); err != nil {
+	if _, err := cc.FindOne(dto.CustomerID); err != nil {
 		if errors.Is(err, customer_infrastructure.ErrCustomerNotFound) {
 			return ErrCustomerNotFound
 		}

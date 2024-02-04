@@ -18,7 +18,7 @@ func (c CustomerService) GetTotalAmountSpent(ID primitive.ObjectID) (float64, er
 	defer client.Disconnect(c.Ctx)
 
 	cr := customer_infrastructure.NewCustomerRepository(c.Ctx, client.Database(c.DBName))
-	customer, err := cr.Find(ID)
+	customer, err := cr.FindOne(ID)
 	if err != nil {
 		errors.Wrap(err, "cr.Find")
 	}
