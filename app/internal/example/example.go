@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	customer_infrastructure "go-mongodb-sample/app/infrastructure/customers"
-	order_infrastructure "go-mongodb-sample/app/infrastructure/orders"
+	"go-mongodb-sample/app/infrastructure/order_infrastructure"
 	product_infrastructure "go-mongodb-sample/app/infrastructure/products"
 	"log"
 	"time"

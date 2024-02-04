@@ -17,4 +17,5 @@ type Customer struct {
 type CustomerAdapter interface {
 	Create(dto *customer_infrastructure.CustomerDTO) (*customer_infrastructure.CustomerDTO, error)
 	FindOne(id primitive.ObjectID) (*customer_infrastructure.CustomerDTO, error)
+	UpdateHistory(ID primitive.ObjectID, orderID primitive.ObjectID) error
 }

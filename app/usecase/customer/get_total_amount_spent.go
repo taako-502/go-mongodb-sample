@@ -2,7 +2,7 @@ package customer_usecase
 
 import (
 	customer_infrastructure "go-mongodb-sample/app/infrastructure/customers"
-	order_infrastructure "go-mongodb-sample/app/infrastructure/orders"
+	"go-mongodb-sample/app/infrastructure/order_infrastructure"
 
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"

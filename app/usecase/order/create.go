@@ -4,13 +4,13 @@ import (
 	"context"
 	"go-mongodb-sample/app/infrastructure"
 	customer_infrastructure "go-mongodb-sample/app/infrastructure/customers"
-	order_infrastructure "go-mongodb-sample/app/infrastructure/orders"
+	"go-mongodb-sample/app/infrastructure/order_infrastructure"
 	"go-mongodb-sample/app/model"
 
 	"github.com/pkg/errors"
 )
 
-func (o OrderService) Create(tm *infrastructure.MongoTransactionManager, cc *customer_infrastructure.OrderRepository, dto CreateDTO) error {
+func (o OrderService) Create(tm *infrastructure.MongoTransactionManager, co *customer_infrastructure.CustomerRepository, dto CreateDTO) error {
 	// dtoからmodelを作成する
 	detailsModel := make([]model.OrderDetail, len(dto.OrderDetails))
 	for i, v := range dto.OrderDetails {
@@ -22,7 +22,7 @@ func (o OrderService) Create(tm *infrastructure.MongoTransactionManager, cc *cus
 	}
 
 	// カスタマーが存在するか確認する
-	if _, err := cc.FindOne(dto.CustomerID); err != nil {
+	if _, err := co.FindOne(dto.CustomerID); err != nil {
 		if errors.Is(err, customer_infrastructure.ErrCustomerNotFound) {
 			return ErrCustomerNotFound
 		}
@@ -61,7 +61,7 @@ func (o OrderService) Create(tm *infrastructure.MongoTransactionManager, cc *cus
 		}
 
 		// カスタマーのオーダー履歴を追加する
-		if err = cc.UpdateHistory(dto.CustomerID, createdOrder.ID); err != nil {
+		if err = co.UpdateHistory(dto.CustomerID, createdOrder.ID); err != nil {
 			return errors.Wrap(err, "customer_infrastructure.OrderRepository.UpdateHistory")
 		}
 
