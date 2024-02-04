@@ -23,13 +23,13 @@ func (o OrderService) Create(tm *infrastructures.MongoTransactionManager, cc *cu
 
 	// カスタマーが存在するか確認する
 	if _, err := cc.Find(dto.CustomerID); err != nil {
-		return errors.Wrap(err, "cc.FindByID")
+		return errors.Wrap(err, "customer_infrastructure.OrderRepository.FindByID")
 	}
 
 	// トランザクションを使用するためのセッションを開始
 	session, err := tm.StartSession()
 	if err != nil {
-		return errors.Wrap(err, "client.StartSession")
+		return errors.Wrap(err, "tm.StartSession")
 	}
 	defer session.EndSession(o.Ctx)
 
@@ -54,17 +54,17 @@ func (o OrderService) Create(tm *infrastructures.MongoTransactionManager, cc *cu
 		oi := order_infrastructure.NewOrderRepository(ctx, tm.Client.Database(o.DBName))
 		createdOrder, err := oi.Create(newOrder)
 		if err != nil {
-			return errors.Wrap(err, "oi.Create")
+			return errors.Wrap(err, "order_infrastructure.OrderRepository.Create")
 		}
 
 		// カスタマーのオーダー履歴を追加する
 		if err = cc.UpdateHistory(dto.CustomerID, createdOrder.ID); err != nil {
-			return errors.Wrap(err, "cc.UpdateHistory")
+			return errors.Wrap(err, "customer_infrastructure.OrderRepository.UpdateHistory")
 		}
 
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "mongo.WithSession")
+		return errors.Wrap(err, "tm.WithSession")
 	}
 
 	return nil
