@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (o OrderService) Create(tm *infrastructure.MongoTransactionManager, co *customer_infrastructure.CustomerRepository, dto CreateDTO) error {
+func (o OrderService) Create(tm *infrastructure.MongoTransactionManager, co model.CustomerAdapter, dto CreateDTO) error {
 	// dtoからmodelを作成する
 	detailsModel := make([]model.OrderDetail, len(dto.OrderDetails))
 	for i, v := range dto.OrderDetails {

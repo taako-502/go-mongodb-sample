@@ -14,7 +14,7 @@ type fakeCustomerRepository struct {
 	updateCustomerHistory error
 }
 
-func NewFakeProductRepository() model.CustomerAdapter {
+func NewFakeCustomerRepositor() model.CustomerAdapter {
 	customerMap := make(map[*customer_infrastructure.CustomerDTO]error)
 	return &fakeCustomerRepository{
 		insertCustomer:        customerMap,
@@ -34,7 +34,7 @@ func (r *fakeCustomerRepository) Create(dto *customer_infrastructure.CustomerDTO
 }
 
 func (r *fakeCustomerRepository) FindOne(id primitive.ObjectID) (*customer_infrastructure.CustomerDTO, error) {
-	emptyID, _ := primitive.ObjectIDFromHex("000000000000000000000000")
+	emptyID, _ := primitive.ObjectIDFromHex("000000000000000000000001")
 	if id == emptyID {
 		return nil, customer_infrastructure.ErrCustomerNotFound
 	}
