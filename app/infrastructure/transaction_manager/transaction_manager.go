@@ -1,4 +1,4 @@
-package infrastructure
+package transaction_manager
 
 import (
 	"context"
@@ -7,24 +7,38 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+type TransactionManager interface {
+	StartSession() error
+	EndSession()
+	WithSession(fn func(sc context.Context) error) error
+}
+
 type MongoTransactionManager struct {
-	Ctx    context.Context
-	Client *mongo.Client
+	Ctx     context.Context
+	Client  *mongo.Client
+	Session mongo.Session
 }
 
 func NewMongoTransactionManager(ctx context.Context, client *mongo.Client) *MongoTransactionManager {
 	return &MongoTransactionManager{Ctx: ctx, Client: client}
 }
 
-func (tm *MongoTransactionManager) StartSession() (mongo.Session, error) {
-	return tm.Client.StartSession()
+func (tm *MongoTransactionManager) StartSession() error {
+	sess, err := tm.Client.StartSession()
+	if err != nil {
+		return errors.Wrap(err, "tm.Client.StartSession()")
+	}
+	tm.Session = sess
+	return nil
+}
+
+func (tm *MongoTransactionManager) EndSession() {
+	tm.Session.EndSession(tm.Ctx)
 }
 
 func (tm *MongoTransactionManager) WithSession(
-	ctx context.Context,
-	sess mongo.Session,
 	fn func(sc context.Context) error) error {
-	return mongo.WithSession(ctx, sess, func(sc mongo.SessionContext) error {
+	return mongo.WithSession(tm.Ctx, tm.Session, func(sc mongo.SessionContext) error {
 		if err := sc.StartTransaction(); err != nil {
 			return errors.Wrap(err, "sc.StartTransaction()")
 		}

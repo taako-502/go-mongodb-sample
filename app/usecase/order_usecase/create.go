@@ -2,15 +2,16 @@ package order_usecase
 
 import (
 	"context"
-	"go-mongodb-sample/app/infrastructure"
 	"go-mongodb-sample/app/infrastructure/customer_infrastructure"
 	"go-mongodb-sample/app/infrastructure/order_infrastructure"
+	"go-mongodb-sample/app/infrastructure/transaction_manager"
 	"go-mongodb-sample/app/model"
 
 	"github.com/pkg/errors"
 )
 
-func (o OrderService) Create(tm *infrastructure.MongoTransactionManager, co model.CustomerAdapter, oi model.OrderAdapter, dto CreateDTO) error {
+func (o OrderService) Create(tm transaction_manager.TransactionManager, co model.CustomerAdapter, oi model.OrderAdapter, dto CreateDTO) error {
+
 	// dtoからmodelを作成する
 	detailsModel := make([]model.OrderDetail, len(dto.OrderDetails))
 	for i, v := range dto.OrderDetails {
@@ -30,14 +31,14 @@ func (o OrderService) Create(tm *infrastructure.MongoTransactionManager, co mode
 	}
 
 	// トランザクションを使用するためのセッションを開始
-	session, err := tm.StartSession()
-	if err != nil {
+	if err := tm.StartSession(); err != nil {
 		return errors.Wrap(err, "tm.StartSession")
 	}
-	defer session.EndSession(tm.Ctx)
+	defer tm.EndSession()
 
 	// トランザクションを開始
-	if err = tm.WithSession(tm.Ctx, session, func(ctx context.Context) error {
+	if err = tm.WithSession(func(ctx context.Context) error {
+		// NOTE: トランザクション内のテストができていない
 		// TODO: 在庫数を更新する
 		// オーダーを永続化する
 		var totalAmount float64
