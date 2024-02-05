@@ -8,11 +8,12 @@ import (
 )
 
 type MongoTransactionManager struct {
+	Ctx    context.Context
 	Client *mongo.Client
 }
 
-func NewMongoTransactionManager(client *mongo.Client) *MongoTransactionManager {
-	return &MongoTransactionManager{Client: client}
+func NewMongoTransactionManager(ctx context.Context, client *mongo.Client) *MongoTransactionManager {
+	return &MongoTransactionManager{Ctx: ctx, Client: client}
 }
 
 func (tm *MongoTransactionManager) StartSession() (mongo.Session, error) {

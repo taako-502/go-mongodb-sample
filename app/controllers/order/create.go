@@ -7,6 +7,7 @@ import (
 
 	"go-mongodb-sample/app/infrastructure"
 	"go-mongodb-sample/app/infrastructure/customer_infrastructure"
+	"go-mongodb-sample/app/infrastructure/order_infrastructure"
 	"go-mongodb-sample/app/usecase/order_usecase"
 
 	"github.com/labstack/echo/v4"
@@ -65,10 +66,11 @@ func (oo OrderController) Create(c echo.Context) error {
 	}
 	defer client.Disconnect(ctx)
 
-	o := order_usecase.NewOrderService(ctx, oo.ConnectionString, oo.DBName)
-	tm := infrastructure.NewMongoTransactionManager(client)
-	cc := customer_infrastructure.NewCustomerRepository(o.Ctx, client.Database(o.DBName))
-	if err := o.Create(tm, cc, dto); err != nil {
+	o := order_usecase.NewOrderService()
+	tm := infrastructure.NewMongoTransactionManager(ctx, client)
+	cc := customer_infrastructure.NewCustomerRepository(ctx, client.Database(oo.DBName))
+	oi := order_infrastructure.NewOrderRepository(ctx, client.Database(oo.DBName))
+	if err := o.Create(tm, cc, oi, dto); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 

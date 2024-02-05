@@ -4,6 +4,7 @@ import (
 	"context"
 	"go-mongodb-sample/app/infrastructure"
 	"go-mongodb-sample/app/infrastructure/customer_infrastructure/customer_infrastructure_fake"
+	"go-mongodb-sample/app/infrastructure/order_infrastructure/order_infrastructure_fake"
 	"testing"
 	"time"
 
@@ -61,13 +62,10 @@ func TestOrderService_Create(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			o := OrderService{
-				Ctx:              tt.fields.Ctx,
-				DBName:           tt.fields.DBName,
-				ConnectionString: tt.fields.ConnectionString,
-			}
+			o := OrderService{}
 			customerFake := customer_infrastructure_fake.NewFakeCustomerRepositor()
-			if err := o.Create(tt.args.tm, customerFake, tt.args.dto); (err != nil) != tt.wantErr {
+			orderFake := order_infrastructure_fake.NewFakeOrderRepository()
+			if err := o.Create(tt.args.tm, customerFake, orderFake, tt.args.dto); (err != nil) != tt.wantErr {
 				t.Errorf("OrderService.Create() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

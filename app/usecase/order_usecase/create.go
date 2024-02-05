@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (o OrderService) Create(tm *infrastructure.MongoTransactionManager, co model.CustomerAdapter, dto CreateDTO) error {
+func (o OrderService) Create(tm *infrastructure.MongoTransactionManager, co model.CustomerAdapter, oi model.OrderAdapter, dto CreateDTO) error {
 	// dtoからmodelを作成する
 	detailsModel := make([]model.OrderDetail, len(dto.OrderDetails))
 	for i, v := range dto.OrderDetails {
@@ -34,10 +34,10 @@ func (o OrderService) Create(tm *infrastructure.MongoTransactionManager, co mode
 	if err != nil {
 		return errors.Wrap(err, "tm.StartSession")
 	}
-	defer session.EndSession(o.Ctx)
+	defer session.EndSession(tm.Ctx)
 
 	// トランザクションを開始
-	if err = tm.WithSession(o.Ctx, session, func(ctx context.Context) error {
+	if err = tm.WithSession(tm.Ctx, session, func(ctx context.Context) error {
 		// TODO: 在庫数を更新する
 		// オーダーを永続化する
 		var totalAmount float64
@@ -54,7 +54,6 @@ func (o OrderService) Create(tm *infrastructure.MongoTransactionManager, co mode
 			totalAmount,
 			model.Status,
 		)
-		oi := order_infrastructure.NewOrderRepository(ctx, tm.Client.Database(o.DBName))
 		createdOrder, err := oi.Create(newOrder)
 		if err != nil {
 			return errors.Wrap(err, "order_infrastructure.OrderRepository.Create")
