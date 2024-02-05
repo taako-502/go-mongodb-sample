@@ -1,7 +1,7 @@
 package order_infrastructure_fake
 
 import (
-	customer_infrastructure "go-mongodb-sample/app/infrastructure/customers"
+	"go-mongodb-sample/app/infrastructure/customer_infrastructure"
 	"go-mongodb-sample/app/infrastructure/order_infrastructure"
 	"go-mongodb-sample/app/model"
 

@@ -3,7 +3,7 @@ package order_usecase
 import (
 	"context"
 	"go-mongodb-sample/app/infrastructure"
-	"go-mongodb-sample/app/infrastructure/customers/customer_infrastructure_fake"
+	"go-mongodb-sample/app/infrastructure/customer_infrastructure/customer_infrastructure_fake"
 	"testing"
 	"time"
 

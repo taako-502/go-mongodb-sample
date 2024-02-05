@@ -1,7 +1,7 @@
 package product_usecase
 
 import (
-	product_infrastructure "go-mongodb-sample/app/infrastructure/products"
+	"go-mongodb-sample/app/infrastructure/product_infrastructure"
 	"go-mongodb-sample/app/model"
 
 	"github.com/pkg/errors"

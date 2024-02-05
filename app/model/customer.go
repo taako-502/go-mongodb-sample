@@ -1,7 +1,7 @@
 package model
 
 import (
-	customer_infrastructure "go-mongodb-sample/app/infrastructure/customers"
+	"go-mongodb-sample/app/infrastructure/customer_infrastructure"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"go-mongodb-sample/app/infrastructure"
-	customer_infrastructure "go-mongodb-sample/app/infrastructure/customers"
-	order_usecase "go-mongodb-sample/app/usecase/order"
+	"go-mongodb-sample/app/infrastructure/customer_infrastructure"
+	"go-mongodb-sample/app/usecase/order_usecase"
 
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"
