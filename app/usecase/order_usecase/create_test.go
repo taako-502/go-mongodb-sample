@@ -1,7 +1,6 @@
 package order_usecase
 
 import (
-	"context"
 	"go-mongodb-sample/app/infrastructure"
 	"go-mongodb-sample/app/infrastructure/customer_infrastructure/customer_infrastructure_fake"
 	"go-mongodb-sample/app/infrastructure/order_infrastructure/order_infrastructure_fake"
@@ -12,29 +11,32 @@ import (
 )
 
 func TestOrderService_Create(t *testing.T) {
-	emptyID, _ := primitive.ObjectIDFromHex("000000000000000000000001")
-	type fields struct {
-		Ctx              context.Context
-		DBName           string
-		ConnectionString string
-	}
+	exist, _ := primitive.ObjectIDFromHex("000000000000000000000001")
+	emptyID, _ := primitive.ObjectIDFromHex("000000000000000000000099")
 	type args struct {
 		tm  *infrastructure.MongoTransactionManager
 		dto CreateDTO
 	}
 	tests := []struct {
 		name    string
-		fields  fields
 		args    args
 		wantErr bool
 	}{
 		{
-			name: "modelの作成に失敗",
-			fields: fields{
-				Ctx:              context.Background(),
-				DBName:           "test",
-				ConnectionString: "mongodb://localhost:27017",
+			name: "正常系",
+			args: args{
+				tm: &infrastructure.MongoTransactionManager{},
+				dto: CreateDTO{
+					CustomerID:   exist,
+					OrderDetails: []OrderDetailDTO{{ProductID: exist}},
+					OrderDate:    time.Date(2020, 1, 1, 0, 0, 0, 0, time.Local),
+					Status:       "test",
+				},
 			},
+			wantErr: false,
+		},
+		{
+			name: "modelの作成に失敗",
 			args: args{
 				tm:  &infrastructure.MongoTransactionManager{},
 				dto: CreateDTO{},
@@ -43,11 +45,6 @@ func TestOrderService_Create(t *testing.T) {
 		},
 		{
 			name: "カスタマーが存在しない",
-			fields: fields{
-				Ctx:              context.Background(),
-				DBName:           "test",
-				ConnectionString: "mongodb://localhost:27017",
-			},
 			args: args{
 				tm: &infrastructure.MongoTransactionManager{},
 				dto: CreateDTO{
