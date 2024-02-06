@@ -30,12 +30,6 @@ func (o OrderService) Create(tm transaction_manager.TransactionManager, co model
 		return errors.Wrap(err, "customer_infrastructure.OrderRepository.FindByID")
 	}
 
-	// トランザクションを使用するためのセッションを開始
-	if err := tm.StartSession(); err != nil {
-		return errors.Wrap(err, "tm.StartSession")
-	}
-	defer tm.EndSession()
-
 	// トランザクションを開始
 	if err = tm.WithSession(func(ctx context.Context) error {
 		// NOTE: トランザクション内のテストができていない

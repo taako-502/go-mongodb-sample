@@ -8,8 +8,6 @@ import (
 )
 
 type TransactionManager interface {
-	StartSession() error
-	EndSession()
 	WithSession(fn func(sc context.Context) error) error
 }
 
@@ -23,22 +21,14 @@ func NewMongoTransactionManager(ctx context.Context, client *mongo.Client) *Mong
 	return &MongoTransactionManager{Ctx: ctx, Client: client}
 }
 
-func (tm *MongoTransactionManager) StartSession() error {
+func (tm *MongoTransactionManager) WithSession(fn func(sc context.Context) error) error {
 	sess, err := tm.Client.StartSession()
 	if err != nil {
-		return errors.Wrap(err, "tm.Client.StartSession()")
+		return errors.Wrap(err, "tm.Client.StartSession")
 	}
-	tm.Session = sess
-	return nil
-}
+	defer sess.EndSession(tm.Ctx)
 
-func (tm *MongoTransactionManager) EndSession() {
-	tm.Session.EndSession(tm.Ctx)
-}
-
-func (tm *MongoTransactionManager) WithSession(
-	fn func(sc context.Context) error) error {
-	return mongo.WithSession(tm.Ctx, tm.Session, func(sc mongo.SessionContext) error {
+	return mongo.WithSession(tm.Ctx, sess, func(sc mongo.SessionContext) error {
 		if err := sc.StartTransaction(); err != nil {
 			return errors.Wrap(err, "sc.StartTransaction()")
 		}
