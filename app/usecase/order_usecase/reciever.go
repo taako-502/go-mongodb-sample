@@ -1,7 +1,7 @@
 package order_usecase
 
-type OrderService struct{}
+type orderService struct{}
 
-func NewOrderService() *OrderService {
-	return &OrderService{}
+func NewOrderService() *orderService {
+	return &orderService{}
 }

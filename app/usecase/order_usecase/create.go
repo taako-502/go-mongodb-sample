@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (o OrderService) Create(tm transaction_manager.TransactionManager, co model.CustomerAdapter, oi model.OrderAdapter, dto CreateDTO) error {
+func (o orderService) Create(tm transaction_manager.TransactionManager, co model.CustomerAdapter, oi model.OrderAdapter, dto CreateDTO) error {
 
 	// dtoからmodelを作成する
 	detailsModel := make([]model.OrderDetail, len(dto.OrderDetails))

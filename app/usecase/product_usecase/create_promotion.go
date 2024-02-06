@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (p ProductService) CreatePromotion(c model.ProductAdapter, dto *productlDTO) (*productlDTO, error) {
+func (p productService) CreatePromotion(c model.ProductAdapter, dto *productlDTO) (*productlDTO, error) {
 	model, err := model.NewProduct(
 		dto.ID,
 		dto.Name,

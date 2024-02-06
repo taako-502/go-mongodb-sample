@@ -1,8 +1,8 @@
 package product_usecase
 
-type ProductService struct {
+type productService struct {
 }
 
-func NewProductService() *ProductService {
-	return &ProductService{}
+func NewProductService() *productService {
+	return &productService{}
 }

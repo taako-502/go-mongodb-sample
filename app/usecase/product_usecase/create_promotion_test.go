@@ -51,7 +51,7 @@ func TestProductService_CreatePromotion(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			fake := product_infrastructure_fake.NewFakeProductRepository()
-			p := ProductService{}
+			p := productService{}
 			got, err := p.CreatePromotion(fake, tt.args.dto)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ProductService.CreatePromotion() error = %v, wantErr %v", err, tt.wantErr)
