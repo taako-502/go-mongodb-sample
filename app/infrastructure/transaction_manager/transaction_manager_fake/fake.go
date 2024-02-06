@@ -11,13 +11,6 @@ func NewFakeTransactionManager() transaction_manager.TransactionManager {
 	return &TransactionManagerFake{}
 }
 
-func (tm *TransactionManagerFake) StartSession() error {
-	return nil
-}
-
-func (tm *TransactionManagerFake) EndSession() {
-}
-
 func (tm *TransactionManagerFake) WithSession(fn func(sc context.Context) error) error {
-	return nil
+	return fn(context.Background())
 }
