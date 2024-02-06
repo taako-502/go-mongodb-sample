@@ -2,14 +2,13 @@ package customer_controller
 
 import (
 	"context"
-	"errors"
+	"go-mongodb-sample/app/infrastructure"
 	"go-mongodb-sample/app/infrastructure/customer_infrastructure"
 	"net/http"
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/pkg/errors"
 )
 
 type NewCreate struct {
@@ -27,13 +26,13 @@ func (cc CostumerController) Create(c echo.Context) error {
 	// コンテキストを設定
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(cc.ConnectionString))
+	dbm, err := infrastructure.NewMongoDBManager(ctx, cc.ConnectionString)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		return errors.Wrap(err, "NewMongoDBManager")
 	}
-	defer client.Disconnect(ctx)
+	defer dbm.Client.Disconnect(ctx)
 
-	ci := customer_infrastructure.NewCustomerRepository(ctx, client.Database(cc.DBName))
+	ci := customer_infrastructure.NewCustomerRepository(ctx, dbm.Client.Database(cc.DBName))
 	dto := customer_infrastructure.NewCustomerDTO(request.Name, request.Email, request.Address)
 	customer, err := ci.Create(dto)
 	if err != nil {

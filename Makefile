@@ -6,3 +6,6 @@ up:
 
 down:
 	go run migrations/down/main.go
+
+test:
+	go test ./...

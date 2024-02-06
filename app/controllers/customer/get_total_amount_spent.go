@@ -2,15 +2,15 @@ package customer_controller
 
 import (
 	"context"
+	"go-mongodb-sample/app/infrastructure"
 	customer_usecase "go-mongodb-sample/app/usecase/customer"
 	"net/http"
 	"strconv"
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func (cc CostumerController) GetTotalAmountSpent(c echo.Context) error {
@@ -22,11 +22,11 @@ func (cc CostumerController) GetTotalAmountSpent(c echo.Context) error {
 	// コンテキストを設定
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(cc.ConnectionString))
+	dbm, err := infrastructure.NewMongoDBManager(ctx, cc.ConnectionString)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		return errors.Wrap(err, "NewMongoDBManager")
 	}
-	defer client.Disconnect(ctx)
+	defer dbm.Client.Disconnect(ctx)
 
 	cs := customer_usecase.NewCustomerService(ctx, cc.ConnectionString, cc.DBName)
 	amount, err := cs.GetTotalAmountSpent(ID)

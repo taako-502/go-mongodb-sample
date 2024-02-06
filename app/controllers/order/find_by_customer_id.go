@@ -2,15 +2,14 @@ package order_controller
 
 import (
 	"context"
-	"errors"
+	"go-mongodb-sample/app/infrastructure"
 	"go-mongodb-sample/app/infrastructure/order_infrastructure"
 	"net/http"
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func (oo OrderController) FindByCustomerID(c echo.Context) error {
@@ -22,13 +21,13 @@ func (oo OrderController) FindByCustomerID(c echo.Context) error {
 	// コンテキストを設定
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(oo.ConnectionString))
+	dbm, err := infrastructure.NewMongoDBManager(ctx, oo.ConnectionString)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		return errors.Wrap(err, "NewMongoDBManager")
 	}
-	defer client.Disconnect(ctx)
+	defer dbm.Client.Disconnect(ctx)
 
-	oi := order_infrastructure.NewOrderRepository(ctx, client.Database(oo.DBName))
+	oi := order_infrastructure.NewOrderRepository(ctx, dbm.Client.Database(oo.DBName))
 	order, err := oi.FindByCustomerID(customerID)
 	if errors.Is(err, order_infrastructure.ErrOrderNotFound) {
 		return echo.NewHTTPError(http.StatusNotFound, err.Error())

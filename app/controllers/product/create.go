@@ -2,14 +2,14 @@ package product_controller
 
 import (
 	"context"
+	"go-mongodb-sample/app/infrastructure"
 	"go-mongodb-sample/app/infrastructure/product_infrastructure"
 	"time"
 
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/pkg/errors"
 )
 
 type newCreate struct {
@@ -29,13 +29,13 @@ func (pc ProductController) Create(c echo.Context) error {
 	// コンテキストを設定
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(pc.ConnectionString))
+	dbm, err := infrastructure.NewMongoDBManager(ctx, pc.ConnectionString)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		return errors.Wrap(err, "NewMongoDBManager")
 	}
-	defer client.Disconnect(ctx)
+	defer dbm.Client.Disconnect(ctx)
 
-	pi := product_infrastructure.NewProductRepository(ctx, client.Database(pc.DBName))
+	pi := product_infrastructure.NewProductRepository(ctx, dbm.Client.Database(pc.DBName))
 	dto := product_infrastructure.NewProductDTO(
 		request.Name,
 		request.Description,
