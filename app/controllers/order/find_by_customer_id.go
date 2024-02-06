@@ -3,10 +3,9 @@ package order_controller
 import (
 	"context"
 	"errors"
+	"go-mongodb-sample/app/infrastructure/order_infrastructure"
 	"net/http"
 	"time"
-
-	order_infrastructure "go-mongodb-sample/app/infrastructures/orders"
 
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson/primitive"

@@ -1,7 +1,7 @@
 package product_usecase
 
 import (
-	product_infrastructure_fake "go-mongodb-sample/app/infrastructures/products/fake"
+	"go-mongodb-sample/app/infrastructure/product_infrastructure/product_infrastructure_fake"
 	"reflect"
 	"testing"
 	"time"
@@ -51,7 +51,7 @@ func TestProductService_CreatePromotion(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			fake := product_infrastructure_fake.NewFakeProductRepository()
-			p := ProductService{}
+			p := productService{}
 			got, err := p.CreatePromotion(fake, tt.args.dto)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ProductService.CreatePromotion() error = %v, wantErr %v", err, tt.wantErr)

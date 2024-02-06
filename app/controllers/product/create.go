@@ -2,7 +2,7 @@ package product_controller
 
 import (
 	"context"
-	product_infrastructure "go-mongodb-sample/app/infrastructures/products"
+	"go-mongodb-sample/app/infrastructure/product_infrastructure"
 	"time"
 
 	"net/http"

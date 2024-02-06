@@ -7,16 +7,16 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type OrderRepository struct {
+type CustomerRepository struct {
 	Ctx        context.Context
 	Collection *mongo.Collection
 }
 
-func NewCustomerRepository(ctx context.Context, DB *mongo.Database) OrderRepository {
+func NewCustomerRepository(ctx context.Context, DB *mongo.Database) *CustomerRepository {
 	DBName := os.Getenv("CUSTOMER_COLLECTION_NAME")
 	if DBName == "" {
 		DBName = "customers"
 	}
 	collection := DB.Collection(DBName)
-	return OrderRepository{Ctx: ctx, Collection: collection}
+	return &CustomerRepository{Ctx: ctx, Collection: collection}
 }

@@ -3,9 +3,9 @@ package example
 import (
 	"context"
 	"fmt"
-	customer_infrastructure "go-mongodb-sample/app/infrastructures/customers"
-	order_infrastructure "go-mongodb-sample/app/infrastructures/orders"
-	product_infrastructure "go-mongodb-sample/app/infrastructures/products"
+	"go-mongodb-sample/app/infrastructure/customer_infrastructure"
+	"go-mongodb-sample/app/infrastructure/order_infrastructure"
+	"go-mongodb-sample/app/infrastructure/product_infrastructure"
 	"log"
 	"time"
 
@@ -52,7 +52,7 @@ func Exammple(connectionString string, ctx context.Context, dbname string) {
 	fmt.Println("Inserted a single document: ", order)
 
 	// ドキュメントを取得するクエリ
-	findedCustomer, err := c.Find(customer.ID)
+	findedCustomer, err := c.FindOne(customer.ID)
 	if err != nil {
 		log.Fatal(err)
 	}

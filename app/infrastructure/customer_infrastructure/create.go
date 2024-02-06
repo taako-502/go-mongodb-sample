@@ -6,7 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func (c OrderRepository) Create(dto *CustomerDTO) (*CustomerDTO, error) {
+func (c CustomerRepository) Create(dto *CustomerDTO) (*CustomerDTO, error) {
 	result, err := c.Collection.InsertOne(c.Ctx, dto)
 	if err != nil {
 		if writeErr, ok := err.(mongo.WriteException); ok {

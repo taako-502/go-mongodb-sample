@@ -2,7 +2,7 @@ package model
 
 import (
 	"errors"
-	order_infrastructure "go-mongodb-sample/app/infrastructures/orders"
+	"go-mongodb-sample/app/infrastructure/order_infrastructure"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -25,6 +25,7 @@ type Order struct {
 type OrderAdapter interface {
 	Create(dto *order_infrastructure.OrderDTO) (*order_infrastructure.OrderDTO, error)
 	FindByCustomerID(customerID primitive.ObjectID) ([]order_infrastructure.OrderDTO, error)
+	GetTotalAmountSpent(orderHistories []primitive.ObjectID) (float64, error)
 }
 
 func NewOrder(customerID primitive.ObjectID, orderDetails []OrderDetail, orderDate time.Time, status string) (*Order, error) {

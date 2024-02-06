@@ -1,8 +1,8 @@
 package customer_usecase
 
 import (
-	customer_infrastructure "go-mongodb-sample/app/infrastructures/customers"
-	order_infrastructure "go-mongodb-sample/app/infrastructures/orders"
+	"go-mongodb-sample/app/infrastructure/customer_infrastructure"
+	"go-mongodb-sample/app/infrastructure/order_infrastructure"
 
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -18,7 +18,7 @@ func (c CustomerService) GetTotalAmountSpent(ID primitive.ObjectID) (float64, er
 	defer client.Disconnect(c.Ctx)
 
 	cr := customer_infrastructure.NewCustomerRepository(c.Ctx, client.Database(c.DBName))
-	customer, err := cr.Find(ID)
+	customer, err := cr.FindOne(ID)
 	if err != nil {
 		errors.Wrap(err, "cr.Find")
 	}

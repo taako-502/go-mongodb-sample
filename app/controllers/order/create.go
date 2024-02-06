@@ -5,10 +5,16 @@ import (
 	"net/http"
 	"time"
 
-	order_usecase "go-mongodb-sample/app/usecase/order"
+	"go-mongodb-sample/app/infrastructure/customer_infrastructure"
+	"go-mongodb-sample/app/infrastructure/order_infrastructure"
+	"go-mongodb-sample/app/infrastructure/transaction_manager"
+	"go-mongodb-sample/app/usecase/order_usecase"
 
 	"github.com/labstack/echo/v4"
+	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type newCreate struct {
@@ -54,9 +60,17 @@ func (oo OrderController) Create(c echo.Context) error {
 	// コンテキストを設定
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(oo.ConnectionString))
+	if err != nil {
+		return errors.Wrap(err, "mongo.Connect")
+	}
+	defer client.Disconnect(ctx)
 
-	o := order_usecase.NewOrderService(ctx, oo.ConnectionString, oo.DBName)
-	if err := o.Create(dto); err != nil {
+	o := order_usecase.NewOrderService()
+	tm := transaction_manager.NewMongoTransactionManager(ctx, client)
+	cc := customer_infrastructure.NewCustomerRepository(ctx, client.Database(oo.DBName))
+	oi := order_infrastructure.NewOrderRepository(ctx, client.Database(oo.DBName))
+	if err := o.Create(tm, cc, oi, dto); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 

@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func (c OrderRepository) Find(id primitive.ObjectID) (*CustomerDTO, error) {
+func (c CustomerRepository) FindOne(id primitive.ObjectID) (*CustomerDTO, error) {
 	var customer *CustomerDTO
 	if err := c.Collection.FindOne(c.Ctx, primitive.D{{Key: "_id", Value: id}}).Decode(&customer); err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {

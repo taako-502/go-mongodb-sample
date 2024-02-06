@@ -1,8 +1,8 @@
 package product_infrastructure_fake
 
 import (
-	product_infrastructure "go-mongodb-sample/app/infrastructures/products"
-	model "go-mongodb-sample/app/models"
+	"go-mongodb-sample/app/infrastructure/product_infrastructure"
+	"go-mongodb-sample/app/model"
 
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
