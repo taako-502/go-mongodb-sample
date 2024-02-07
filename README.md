@@ -1,6 +1,7 @@
 # Go MongoDB Sample
 
 [![codecov](https://codecov.io/gh/taako-502/go-mongodb-sample/branch/master/graph/badge.svg)](https://codecov.io/gh/taako-502/go-mongodb-sample)
+[![Go Report Card](https://goreportcard.com/badge/github.com/taako-502/go-mongodb-sample)](https://goreportcard.com/report/github.com/taako-502/go-mongodb-sample)
 
 ## 環境構築
 
