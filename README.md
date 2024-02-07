@@ -13,7 +13,7 @@ go run app/migration/create_index.go
 
 ### Replica Set の設定
 
-mongo shell を開く
+mongo shell を開く。
 
 ```bash
 docker exec -it go-mongodb-sample-mongodb-1 mongosh
