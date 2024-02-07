@@ -34,17 +34,37 @@ func (r *fakeCustomerRepository) Create(dto *customer_infrastructure.CustomerDTO
 }
 
 func (r *fakeCustomerRepository) FindOne(id primitive.ObjectID) (*customer_infrastructure.CustomerDTO, error) {
+	hasOrderHistoryId, _ := primitive.ObjectIDFromHex("000000000000000000000001")
 	errorId, _ := primitive.ObjectIDFromHex("000000000000000000000400")
 	emptyID, _ := primitive.ObjectIDFromHex("000000000000000000000404")
+	hasErrorOrderHistoryId, _ := primitive.ObjectIDFromHex("000000000000000000400001")
 	switch id {
+	case hasOrderHistoryId:
+		return &customer_infrastructure.CustomerDTO{
+			ID:   id,
+			Name: "test",
+			OrderHistory: []primitive.ObjectID{
+				primitive.NewObjectID(),
+				primitive.NewObjectID(),
+			},
+		}, nil
+	case hasErrorOrderHistoryId:
+		return &customer_infrastructure.CustomerDTO{
+			ID:   id,
+			Name: "test",
+			OrderHistory: []primitive.ObjectID{
+				errorId,
+			},
+		}, nil
 	case errorId:
 		return nil, errors.New("test error")
 	case emptyID:
 		return nil, customer_infrastructure.ErrCustomerNotFound
 	}
 	return &customer_infrastructure.CustomerDTO{
-		ID:   id,
-		Name: "test",
+		ID:           id,
+		Name:         "test",
+		OrderHistory: nil,
 	}, nil
 }
 

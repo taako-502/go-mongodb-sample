@@ -3,6 +3,8 @@ package customer_controller
 import (
 	"context"
 	"go-mongodb-sample/app/infrastructure"
+	"go-mongodb-sample/app/infrastructure/customer_infrastructure"
+	"go-mongodb-sample/app/infrastructure/order_infrastructure"
 	customer_usecase "go-mongodb-sample/app/usecase/customer"
 	"net/http"
 	"strconv"
@@ -28,8 +30,10 @@ func (cc CostumerController) GetTotalAmountSpent(c echo.Context) error {
 	}
 	defer dbm.Client.Disconnect(ctx)
 
-	cs := customer_usecase.NewCustomerService(ctx, cc.ConnectionString, cc.DBName)
-	amount, err := cs.GetTotalAmountSpent(ID)
+	cs := customer_usecase.NewCustomerService()
+	ci := customer_infrastructure.NewCustomerRepository(ctx, dbm.Client.Database(cc.DBName))
+	or := order_infrastructure.NewOrderRepository(ctx, dbm.Client.Database(cc.DBName))
+	amount, err := cs.GetTotalAmountSpent(ci, or, ID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

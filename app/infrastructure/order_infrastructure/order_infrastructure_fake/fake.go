@@ -43,5 +43,9 @@ func (r *fakeOrderRepository) FindByCustomerID(id primitive.ObjectID) ([]order_i
 }
 
 func (r *fakeOrderRepository) GetTotalAmountSpent(orderHistories []primitive.ObjectID) (float64, error) {
+	errorId, _ := primitive.ObjectIDFromHex("000000000000000000000400")
+	if orderHistories[0] == errorId {
+		return 0, errors.New("test error")
+	}
 	return 0, nil
 }
