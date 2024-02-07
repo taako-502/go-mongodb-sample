@@ -1,7 +1,7 @@
 package customer_usecase
 
 import (
-	"go-mongodb-sample/app/model"
+	"github.com/taako-502/go-mongodb-sample/app/model"
 
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"

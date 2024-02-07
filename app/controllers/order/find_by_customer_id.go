@@ -2,10 +2,11 @@ package order_controller
 
 import (
 	"context"
-	"go-mongodb-sample/app/infrastructure"
-	"go-mongodb-sample/app/infrastructure/order_infrastructure"
 	"net/http"
 	"time"
+
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure"
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/order_infrastructure"
 
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"

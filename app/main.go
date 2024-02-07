@@ -1,11 +1,12 @@
 package main
 
 import (
-	customer_controller "go-mongodb-sample/app/controllers/customer"
-	order_controller "go-mongodb-sample/app/controllers/order"
-	product_controller "go-mongodb-sample/app/controllers/product"
 	"log"
 	"os"
+
+	customer_controller "github.com/taako-502/go-mongodb-sample/app/controllers/customer"
+	order_controller "github.com/taako-502/go-mongodb-sample/app/controllers/order"
+	product_controller "github.com/taako-502/go-mongodb-sample/app/controllers/product"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"

@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"time"
 
-	"go-mongodb-sample/app/infrastructure"
-	"go-mongodb-sample/app/infrastructure/customer_infrastructure"
-	"go-mongodb-sample/app/infrastructure/order_infrastructure"
-	"go-mongodb-sample/app/infrastructure/transaction_manager"
-	"go-mongodb-sample/app/usecase/order_usecase"
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure"
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/customer_infrastructure"
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/order_infrastructure"
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/transaction_manager"
+	"github.com/taako-502/go-mongodb-sample/app/usecase/order_usecase"
 
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"

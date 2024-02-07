@@ -1,10 +1,11 @@
 package product_usecase
 
 import (
-	"go-mongodb-sample/app/infrastructure/product_infrastructure/product_infrastructure_fake"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/product_infrastructure/product_infrastructure_fake"
 )
 
 func TestProductService_CreatePromotion(t *testing.T) {

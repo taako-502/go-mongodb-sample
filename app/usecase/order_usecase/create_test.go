@@ -1,11 +1,12 @@
 package order_usecase
 
 import (
-	"go-mongodb-sample/app/infrastructure/customer_infrastructure/customer_infrastructure_fake"
-	"go-mongodb-sample/app/infrastructure/order_infrastructure/order_infrastructure_fake"
-	"go-mongodb-sample/app/infrastructure/transaction_manager/transaction_manager_fake"
 	"testing"
 	"time"
+
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/customer_infrastructure/customer_infrastructure_fake"
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/order_infrastructure/order_infrastructure_fake"
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/transaction_manager/transaction_manager_fake"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

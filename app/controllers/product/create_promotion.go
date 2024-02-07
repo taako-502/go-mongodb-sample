@@ -2,9 +2,10 @@ package product_controller
 
 import (
 	"context"
-	"go-mongodb-sample/app/infrastructure/product_infrastructure"
-	"go-mongodb-sample/app/usecase/product_usecase"
 	"time"
+
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/product_infrastructure"
+	"github.com/taako-502/go-mongodb-sample/app/usecase/product_usecase"
 
 	"net/http"
 

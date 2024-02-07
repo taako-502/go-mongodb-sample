@@ -1,9 +1,10 @@
 package customer_usecase
 
 import (
-	"go-mongodb-sample/app/infrastructure/customer_infrastructure/customer_infrastructure_fake"
-	"go-mongodb-sample/app/infrastructure/order_infrastructure/order_infrastructure_fake"
 	"testing"
+
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/customer_infrastructure/customer_infrastructure_fake"
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/order_infrastructure/order_infrastructure_fake"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

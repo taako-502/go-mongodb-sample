@@ -3,11 +3,12 @@ package example
 import (
 	"context"
 	"fmt"
-	"go-mongodb-sample/app/infrastructure/customer_infrastructure"
-	"go-mongodb-sample/app/infrastructure/order_infrastructure"
-	"go-mongodb-sample/app/infrastructure/product_infrastructure"
 	"log"
 	"time"
+
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/customer_infrastructure"
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/order_infrastructure"
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/product_infrastructure"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
-	_ "go-mongodb-sample/migrations"
+	_ "github.com/taako-502/go-mongodb-sample/migrations"
 )
 
 func main() {

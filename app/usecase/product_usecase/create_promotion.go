@@ -1,8 +1,8 @@
 package product_usecase
 
 import (
-	"go-mongodb-sample/app/infrastructure/product_infrastructure"
-	"go-mongodb-sample/app/model"
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/product_infrastructure"
+	"github.com/taako-502/go-mongodb-sample/app/model"
 
 	"github.com/pkg/errors"
 )

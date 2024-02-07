@@ -2,7 +2,8 @@ package transaction_manager_fake
 
 import (
 	"context"
-	"go-mongodb-sample/app/infrastructure/transaction_manager"
+
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/transaction_manager"
 )
 
 type TransactionManagerFake struct{}

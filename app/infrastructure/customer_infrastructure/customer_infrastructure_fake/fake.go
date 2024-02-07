@@ -1,8 +1,8 @@
 package customer_infrastructure_fake
 
 import (
-	"go-mongodb-sample/app/infrastructure/customer_infrastructure"
-	"go-mongodb-sample/app/model"
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/customer_infrastructure"
+	"github.com/taako-502/go-mongodb-sample/app/model"
 
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"

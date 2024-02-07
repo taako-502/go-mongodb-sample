@@ -2,13 +2,14 @@ package customer_controller
 
 import (
 	"context"
-	"go-mongodb-sample/app/infrastructure"
-	"go-mongodb-sample/app/infrastructure/customer_infrastructure"
-	"go-mongodb-sample/app/infrastructure/order_infrastructure"
-	customer_usecase "go-mongodb-sample/app/usecase/customer"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure"
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/customer_infrastructure"
+	"github.com/taako-502/go-mongodb-sample/app/infrastructure/order_infrastructure"
+	customer_usecase "github.com/taako-502/go-mongodb-sample/app/usecase/customer"
 
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"

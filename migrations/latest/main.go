@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	_ "go-mongodb-sample/migrations"
+	_ "github.com/taako-502/go-mongodb-sample/migrations"
 
 	"github.com/joho/godotenv"
 	migrate "github.com/xakep666/mongo-migrate"

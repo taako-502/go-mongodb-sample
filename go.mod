@@ -1,4 +1,4 @@
-module go-mongodb-sample
+module github.com/taako-502/go-mongodb-sample
 
 go 1.21.3
 
