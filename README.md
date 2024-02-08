@@ -46,6 +46,7 @@ rs.reconfig(config, { force: true });
 ```
 
 ※
+
 MongoDB Atlas に接続すると簡単にレプリカセットの動作確認ができるのでそれでもよい。
 
 ### API Server の起動
