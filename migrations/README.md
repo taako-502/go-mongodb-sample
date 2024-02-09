@@ -1,5 +1,7 @@
 # Migrations
 
+[xakep666/mongo-migrate](https://github.com/xakep666/mongo-migrate)を使ったマイグレーションです。
+
 ## データベースの最新化
 
 ```bash
