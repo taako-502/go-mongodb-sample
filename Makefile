@@ -1,3 +1,5 @@
+.PHONY: test
+
 latest:
 	go run migrations/latest/main.go
 

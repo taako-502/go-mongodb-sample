@@ -14,12 +14,12 @@ docker-compose up -d
 go run app/migration/create_index.go
 ```
 
-### Replica Set の設定
+### ローカル環境 の Replica Set の設定
 
 mongo shell を開く。
 
 ```bash
-docker exec -it go-mongodb-sample-mongodb-1 mongosh
+docker exec -it go_mongodb_sample_db mongosh
 ```
 
 以下を実行する。
@@ -27,7 +27,7 @@ docker exec -it go-mongodb-sample-mongodb-1 mongosh
 ```js
 rs.initiate({
   _id: "rs0",
-  members: [{ _id: 0, host: "localhost:27017" }],
+  members: [{ _id: 0, host: "go_mongodb_sample_db:27017" }],
 })
 ```
 
@@ -48,6 +48,23 @@ rs.reconfig(config, { force: true });
 ※
 
 MongoDB Atlas に接続すると簡単にレプリカセットの動作確認ができるのでそれでもよい。
+
+### CI 用のデータベースの設定
+
+mongo shell を開く。
+
+```bash
+docker exec -it go_mongodb_sample_db_ci mongosh
+```
+
+以下を実行する。
+
+```js
+rs.initiate({
+  _id: "rs0",
+  members: [{ _id: 0, host: "go_mongodb_sample_db_ci:27018" }],
+})
+```
 
 ### API Server の起動
 

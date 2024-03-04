@@ -1,15 +1,26 @@
 version: "3.8"
+
+x-commons: &commons
+  image: mongo:7.0.5
+  command: mongod --replSet rs0
+
 services:
-  mongodb:
-    container_name: mongo_db
-    image: mongo
-    command: mongod --replSet rs0
+  go_mongodb_sample_db:
+    container_name: go_mongodb_sample_db
+    <<: *commons
     ports:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
-  echo:
-    container_name: mongo_echo_server
+
+  go_mongodb_sample_db_ci:
+    container_name: go_mongodb_sample_db_ci
+    <<: *commons
+    ports:
+      - "27018:27017"
+
+  go_mongodb_sample_echo:
+    container_name: go_mongodb_sample_echo
     build: .
     ports:
       - "1323:1323"
@@ -19,6 +30,7 @@ services:
     working_dir: /app
     command: sh -c 'go mod tidy && air'
     depends_on:
-      - mongodb
+      - go_mongodb_sample_db
+
 volumes:
   mongodb_data:

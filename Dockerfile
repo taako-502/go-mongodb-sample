@@ -1,4 +1,4 @@
-FROM golang:1.21.3
+FROM golang:1.22
 
 # モジュールを使用して依存関係を管理
 ENV GO111MODULE=on

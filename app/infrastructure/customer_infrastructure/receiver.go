@@ -13,10 +13,15 @@ type CustomerRepository struct {
 }
 
 func NewCustomerRepository(ctx context.Context, DB *mongo.Database) *CustomerRepository {
+	collection := DB.Collection(GetName())
+	return &CustomerRepository{Ctx: ctx, Collection: collection}
+}
+
+func GetName() string {
 	DBName := os.Getenv("CUSTOMER_COLLECTION_NAME")
 	if DBName == "" {
 		DBName = "customers"
 	}
-	collection := DB.Collection(DBName)
-	return &CustomerRepository{Ctx: ctx, Collection: collection}
+
+	return DBName
 }
