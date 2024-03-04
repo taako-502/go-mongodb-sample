@@ -1,4 +1,4 @@
-name: Go CI
+name: Codecov
 
 on:
   push:
@@ -9,6 +9,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:7.0.5
+        ports:
+          - 27017:27017
 
     steps:
       - name: Set up Go
@@ -28,6 +34,10 @@ jobs:
 
       - name: Test
         run: go test -v -coverprofile=coverage.txt ./...
+        env:
+          MONGO_CI_CONNECTION_STRING: mongodb://localhost:27017/?directConnection=true
+          MONGO_CI_DATABASE_NAME: testdb
+          ENV: ci
 
       - name: Upload coverage reports to Codecov
         # uses: codecov/codecov-action@v4.0.1
