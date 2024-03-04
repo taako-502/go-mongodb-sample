@@ -20,7 +20,7 @@ type cIDatabaseConfig struct {
 }
 
 func NewCIDatabaseConfig(ctx context.Context) (*cIDatabaseConfig, error) {
-	if os.Getenv("EVN") != "ci" {
+	if os.Getenv("ENV") != "ci" {
 		// 実行中のファイルのディレクトリを取得
 		_, b, _, _ := runtime.Caller(0)
 		basepath := filepath.Dir(b)
