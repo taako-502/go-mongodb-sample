@@ -10,14 +10,27 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:7.0.5
+        ports:
+          - 27017:27017
+
     steps:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: "1.22"
+
       - name: Check out code into the Go module directory
         uses: actions/checkout@v4
+
       - name: Get dependencies
         run: go mod download
+
       - name: Test
         run: go test ./... -v
+        env:
+          MONGO_CI_CONNECTION_STRING: mongodb://localhost:27017/?directConnection=true
+          MONGO_CI_DATABASE_NAME: testdb
