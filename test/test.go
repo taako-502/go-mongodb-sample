@@ -20,15 +20,17 @@ type cIDatabaseConfig struct {
 }
 
 func NewCIDatabaseConfig(ctx context.Context) (*cIDatabaseConfig, error) {
-	// 実行中のファイルのディレクトリを取得
-	_, b, _, _ := runtime.Caller(0)
-	basepath := filepath.Dir(b)
+	if os.Getenv("EVN") != "ci" {
+		// 実行中のファイルのディレクトリを取得
+		_, b, _, _ := runtime.Caller(0)
+		basepath := filepath.Dir(b)
 
-	// basepath から .env ファイルの絶対パスを組み立てる
-	envPath := filepath.Join(basepath, "../.env")
+		// basepath から .env ファイルの絶対パスを組み立てる
+		envPath := filepath.Join(basepath, "../.env")
 
-	if err := godotenv.Load(envPath); err != nil {
-		return nil, fmt.Errorf("godotenv.Load(%s): %w", envPath, err)
+		if err := godotenv.Load(envPath); err != nil {
+			return nil, fmt.Errorf("godotenv.Load(%s): %w", envPath, err)
+		}
 	}
 
 	db := cIDatabaseConfig{
