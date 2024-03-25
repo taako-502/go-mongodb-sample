@@ -30,7 +30,7 @@ func main() {
 	migrate.SetDatabase(db)
 
 	one := 1 // 1つ後のバージョンに進める
-	if err := migrate.Up(one); err != nil {
+	if err := migrate.Up(context.Background(), one); err != nil {
 		log.Fatal(err)
 	}
 

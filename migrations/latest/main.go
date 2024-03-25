@@ -29,7 +29,7 @@ func main() {
 	db := client.Database(dbname)
 	migrate.SetDatabase(db)
 
-	if err := migrate.Up(migrate.AllAvailable); err != nil {
+	if err := migrate.Up(context.Background(), migrate.AllAvailable); err != nil {
 		log.Fatal(err)
 	}
 

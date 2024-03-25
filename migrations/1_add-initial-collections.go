@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	migrate.Register(func(db *mongo.Database) error {
+	migrate.Register(func(ctx context.Context, db *mongo.Database) error {
 		opt := options.CreateCollection()
 		if err := db.CreateCollection(context.TODO(), os.Getenv("CUSTOMER_COLLECTION_NAME"), opt); err != nil {
 			return err
@@ -22,7 +22,7 @@ func init() {
 			return err
 		}
 		return nil
-	}, func(db *mongo.Database) error {
+	}, func(ctx context.Context, db *mongo.Database) error {
 		if err := db.Collection(os.Getenv("CUSTOMER_COLLECTION_NAME")).Drop(context.TODO()); err != nil {
 			return err
 		}
