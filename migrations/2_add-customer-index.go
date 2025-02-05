@@ -21,7 +21,7 @@ func init() {
 		}
 		return nil
 	}, func(ctx context.Context, db *mongo.Database) error {
-		if _, err := db.Collection(os.Getenv("CUSTOMER_COLLECTION_NAME")).Indexes().DropOne(context.TODO(), "email_1"); err != nil {
+		if err := db.Collection(os.Getenv("CUSTOMER_COLLECTION_NAME")).Indexes().DropOne(context.TODO(), "email_1"); err != nil {
 			return err
 		}
 		return nil
