@@ -2,13 +2,13 @@ package order_usecase
 
 import (
 	"context"
+	"errors"
+	"fmt"
 
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/customer_infrastructure"
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/order_infrastructure"
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/transaction_manager"
 	"github.com/taako-502/go-mongodb-sample/app/model"
-
-	"github.com/pkg/errors"
 )
 
 func (o orderService) Create(tm transaction_manager.TransactionManager, co model.CustomerAdapter, oi model.OrderAdapter, dto CreateDTO) error {
@@ -20,7 +20,7 @@ func (o orderService) Create(tm transaction_manager.TransactionManager, co model
 	}
 	model, err := model.NewOrder(dto.CustomerID, detailsModel, dto.OrderDate, dto.Status)
 	if err != nil {
-		return errors.Wrap(err, "model.NewOrder")
+		return fmt.Errorf("model.NewOrder: %w", err)
 	}
 
 	// カスタマーが存在するか確認する
@@ -28,7 +28,7 @@ func (o orderService) Create(tm transaction_manager.TransactionManager, co model
 		if errors.Is(err, customer_infrastructure.ErrCustomerNotFound) {
 			return ErrCustomerNotFound
 		}
-		return errors.Wrap(err, "customer_infrastructure.OrderRepository.FindByID")
+		return fmt.Errorf("customer_infrastructure.OrderRepository.FindByID: %w", err)
 	}
 
 	// トランザクションを開始
@@ -52,17 +52,17 @@ func (o orderService) Create(tm transaction_manager.TransactionManager, co model
 		)
 		createdOrder, err := oi.Create(newOrder)
 		if err != nil {
-			return errors.Wrap(err, "order_infrastructure.OrderRepository.Create")
+			return fmt.Errorf("order_infrastructure.OrderRepository.Create: %w", err)
 		}
 
 		// カスタマーのオーダー履歴を追加する
 		if err = co.UpdateHistory(dto.CustomerID, createdOrder.ID); err != nil {
-			return errors.Wrap(err, "customer_infrastructure.OrderRepository.UpdateHistory")
+			return fmt.Errorf("customer_infrastructure.OrderRepository.UpdateHistory: %w", err)
 		}
 
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "tm.WithSession")
+		return fmt.Errorf("tm.WithSession: %w", err)
 	}
 
 	return nil

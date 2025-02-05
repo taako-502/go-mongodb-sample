@@ -1,9 +1,10 @@
 package customer_infrastructure
 
 import (
-	"github.com/pkg/errors"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
+	"fmt"
+
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 func (c CustomerRepository) Create(dto *CustomerDTO) (*CustomerDTO, error) {
@@ -16,12 +17,12 @@ func (c CustomerRepository) Create(dto *CustomerDTO) (*CustomerDTO, error) {
 				}
 			}
 		} else {
-			return nil, errors.Wrap(err, "c.Collection.InsertOne")
+			return nil, fmt.Errorf("c.Collection.InsertOne: %w", err)
 		}
 	}
 
 	return &CustomerDTO{
-		ID:           result.InsertedID.(primitive.ObjectID),
+		ID:           result.InsertedID.(bson.ObjectID),
 		Name:         dto.Name,
 		Email:        dto.Email,
 		Address:      dto.Address,

@@ -2,6 +2,7 @@ package product_controller
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/product_infrastructure"
@@ -10,10 +11,10 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/pkg/errors"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type newCreatePromotion struct {
@@ -26,7 +27,7 @@ type newCreatePromotion struct {
 }
 
 type response struct {
-	ID                 primitive.ObjectID
+	ID                 bson.ObjectID
 	Name               string
 	Description        string
 	Price              float64
@@ -44,9 +45,9 @@ func (pc ProductController) CreatePromotion(c echo.Context) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(pc.ConnectionString))
+	client, err := mongo.Connect(options.Client().ApplyURI(pc.ConnectionString))
 	if err != nil {
-		return errors.Wrap(err, "mongo.Connect")
+		return fmt.Errorf("mongo.Connect: %w", err)
 	}
 	defer client.Disconnect(ctx)
 

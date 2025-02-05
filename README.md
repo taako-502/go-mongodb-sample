@@ -3,9 +3,15 @@
 [![codecov](https://codecov.io/gh/taako-502/go-mongodb-sample/graph/badge.svg?token=1R0OXO8EO4)](https://codecov.io/gh/taako-502/go-mongodb-sample)
 [![Go Report Card](https://goreportcard.com/badge/github.com/taako-502/go-mongodb-sample)](https://goreportcard.com/report/github.com/taako-502/go-mongodb-sample)
 
+## 実行方法
+
+```zsh
+docker compose up -d
+```
+
 ## 環境構築
 
-```bash
+```zsh
 openssl rand -base64 756 > mongodb-keyfile
 chmod 400 mongodb-keyfile
 docker-compose build
@@ -18,7 +24,7 @@ go run app/migration/create_index.go
 
 mongo shell を開く。
 
-```bash
+```zsh
 docker exec -it go_mongodb_sample_db mongosh
 ```
 
@@ -31,7 +37,7 @@ rs.initiate({
 })
 ```
 
-```bash
+```zsh
 rs.status()
 rs.initiate()
 ```
@@ -39,7 +45,7 @@ rs.initiate()
 testdb に接続する方法。
 レプリカの設定を以下のコマンドで行う必要がある。
 
-```bash
+```zsh
 var config = rs.conf();
 config.members[0].host = "mongo_db:27017";
 rs.reconfig(config, { force: true });
@@ -68,7 +74,7 @@ rs.initiate({
 
 ### API Server の起動
 
-```bash
+```zsh
 # Echo API Serverの起動
 go run app/main.go
 ```

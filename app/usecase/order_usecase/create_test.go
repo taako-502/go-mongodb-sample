@@ -7,15 +7,14 @@ import (
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/customer_infrastructure/customer_infrastructure_fake"
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/order_infrastructure/order_infrastructure_fake"
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/transaction_manager/transaction_manager_fake"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 func TestOrderService_Create(t *testing.T) {
-	exist, _ := primitive.ObjectIDFromHex("000000000000000000000001")
-	errorId, _ := primitive.ObjectIDFromHex("000000000000000000000400")
-	emptyID, _ := primitive.ObjectIDFromHex("000000000000000000000404")
-	historyErrorId, _ := primitive.ObjectIDFromHex("100000000000000000000400")
+	exist, _ := bson.ObjectIDFromHex("000000000000000000000001")
+	errorId, _ := bson.ObjectIDFromHex("000000000000000000000400")
+	emptyID, _ := bson.ObjectIDFromHex("000000000000000000000404")
+	historyErrorId, _ := bson.ObjectIDFromHex("100000000000000000000400")
 	type args struct{ dto CreateDTO }
 	tests := []struct {
 		name    string

@@ -10,12 +10,12 @@ import (
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/order_infrastructure"
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/product_infrastructure"
 
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 func Exammple(connectionString string, ctx context.Context, dbname string) {
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(connectionString))
+	client, err := mongo.Connect(options.Client().ApplyURI(connectionString))
 	if err != nil {
 		log.Fatal(err)
 	}

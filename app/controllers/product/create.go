@@ -2,6 +2,7 @@ package product_controller
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure"
@@ -10,7 +11,6 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/pkg/errors"
 )
 
 type newCreate struct {
@@ -32,7 +32,7 @@ func (pc ProductController) Create(c echo.Context) error {
 	defer cancel()
 	dbm, err := infrastructure.NewMongoDBManager(ctx, pc.ConnectionString)
 	if err != nil {
-		return errors.Wrap(err, "NewMongoDBManager")
+		return fmt.Errorf("NewMongoDBManager: %w", err)
 	}
 	defer dbm.Client.Disconnect(ctx)
 

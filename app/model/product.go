@@ -5,12 +5,11 @@ import (
 	"time"
 
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/product_infrastructure"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 type Product struct {
-	ID                 primitive.ObjectID
+	ID                 bson.ObjectID
 	Name               string
 	Description        string
 	Price              float64
@@ -21,11 +20,11 @@ type Product struct {
 
 type ProductAdapter interface {
 	Create(dto *product_infrastructure.ProductDTO) (*product_infrastructure.ProductDTO, error)
-	FindOne(id primitive.ObjectID) (*product_infrastructure.ProductDTO, error)
+	FindOne(id bson.ObjectID) (*product_infrastructure.ProductDTO, error)
 }
 
 func NewProduct(
-	id primitive.ObjectID,
+	id bson.ObjectID,
 	name string,
 	description string,
 	price float64,

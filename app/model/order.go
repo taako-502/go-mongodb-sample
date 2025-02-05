@@ -5,19 +5,18 @@ import (
 	"time"
 
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/order_infrastructure"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 type OrderDetail struct {
-	ProductID primitive.ObjectID
+	ProductID bson.ObjectID
 	Quantity  int
 	Price     float64
 }
 
 type Order struct {
-	ID           primitive.ObjectID
-	CustomerID   primitive.ObjectID
+	ID           bson.ObjectID
+	CustomerID   bson.ObjectID
 	OrderDetails []OrderDetail
 	OrderDate    time.Time
 	Status       string
@@ -25,12 +24,12 @@ type Order struct {
 
 type OrderAdapter interface {
 	Create(dto *order_infrastructure.OrderDTO) (*order_infrastructure.OrderDTO, error)
-	FindByCustomerID(customerID primitive.ObjectID) ([]order_infrastructure.OrderDTO, error)
-	GetTotalAmountSpent(orderHistories []primitive.ObjectID) (float64, error)
+	FindByCustomerID(customerID bson.ObjectID) ([]order_infrastructure.OrderDTO, error)
+	GetTotalAmountSpent(orderHistories []bson.ObjectID) (float64, error)
 }
 
-func NewOrder(customerID primitive.ObjectID, orderDetails []OrderDetail, orderDate time.Time, status string) (*Order, error) {
-	if customerID == primitive.NilObjectID {
+func NewOrder(customerID bson.ObjectID, orderDetails []OrderDetail, orderDate time.Time, status string) (*Order, error) {
+	if customerID == bson.NilObjectID {
 		return nil, errors.New("customerId is required")
 	}
 	if len(orderDetails) == 0 {
@@ -50,7 +49,7 @@ func NewOrder(customerID primitive.ObjectID, orderDetails []OrderDetail, orderDa
 	}, nil
 }
 
-func NewOrderDetail(productID primitive.ObjectID, quantity int, price float64) *OrderDetail {
+func NewOrderDetail(productID bson.ObjectID, quantity int, price float64) *OrderDetail {
 	return &OrderDetail{
 		ProductID: productID,
 		Quantity:  quantity,

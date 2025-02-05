@@ -5,9 +5,9 @@ import (
 	"os"
 
 	migrate "github.com/xakep666/mongo-migrate"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 func init() {
@@ -20,7 +20,7 @@ func init() {
 		}
 		return nil
 	}, func(ctx context.Context, db *mongo.Database) error {
-		if _, err := db.Collection(os.Getenv("PRODUCT_COLLECTION_NAME")).Indexes().DropOne(context.TODO(), "promotion_expires_at_1"); err != nil {
+		if err := db.Collection(os.Getenv("PRODUCT_COLLECTION_NAME")).Indexes().DropOne(context.TODO(), "promotion_expires_at_1"); err != nil {
 			return err
 		}
 		return nil

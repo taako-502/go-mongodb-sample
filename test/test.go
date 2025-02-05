@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type cIDatabaseConfig struct {
@@ -38,7 +38,7 @@ func NewCIDatabaseConfig(ctx context.Context) (*cIDatabaseConfig, error) {
 		uRL:      os.Getenv("MONGO_CI_CONNECTION_STRING"),
 	}
 
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(db.uRL))
+	client, err := mongo.Connect(options.Client().ApplyURI(db.uRL))
 	if err != nil {
 		return nil, fmt.Errorf("mongo.Connect(ctx, options.Client().ApplyURI(%s): %w", db.uRL, err)
 	}

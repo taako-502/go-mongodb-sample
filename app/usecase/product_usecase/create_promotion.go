@@ -1,10 +1,10 @@
 package product_usecase
 
 import (
+	"fmt"
+
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/product_infrastructure"
 	"github.com/taako-502/go-mongodb-sample/app/model"
-
-	"github.com/pkg/errors"
 )
 
 func (p productService) CreatePromotion(c model.ProductAdapter, dto *productlDTO) (*productlDTO, error) {
@@ -18,7 +18,7 @@ func (p productService) CreatePromotion(c model.ProductAdapter, dto *productlDTO
 		dto.PromotionExpiresAt,
 	)
 	if err != nil {
-		return nil, errors.Wrap(err, "model.NewProduct")
+		return nil, fmt.Errorf("model.NewProduct: %w", err)
 	}
 
 	product := product_infrastructure.NewPromotionProductDTO(
@@ -32,7 +32,7 @@ func (p productService) CreatePromotion(c model.ProductAdapter, dto *productlDTO
 
 	createdDto, err := c.Create(product)
 	if err != nil {
-		return nil, errors.Wrap(err, "c.Create")
+		return nil, fmt.Errorf("c.Create: %w", err)
 	}
 
 	result := dto
