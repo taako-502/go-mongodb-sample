@@ -5,16 +5,15 @@ import (
 
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/customer_infrastructure/customer_infrastructure_fake"
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/order_infrastructure/order_infrastructure_fake"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 func Test_customerService_GetTotalAmountSpent(t *testing.T) {
-	hasOrderHistoryId, _ := primitive.ObjectIDFromHex("000000000000000000000001")
-	hasErrorOrderHistoryId, _ := primitive.ObjectIDFromHex("000000000000000000400001")
-	custmoerEmptyID, _ := primitive.ObjectIDFromHex("000000000000000000000404")
+	hasOrderHistoryId, _ := bson.ObjectIDFromHex("000000000000000000000001")
+	hasErrorOrderHistoryId, _ := bson.ObjectIDFromHex("000000000000000000400001")
+	custmoerEmptyID, _ := bson.ObjectIDFromHex("000000000000000000000404")
 	type args struct {
-		ID primitive.ObjectID
+		ID bson.ObjectID
 	}
 	tests := []struct {
 		name    string
@@ -37,7 +36,7 @@ func Test_customerService_GetTotalAmountSpent(t *testing.T) {
 		},
 		{
 			name:    "カスタマーが履歴を持っていない",
-			args:    args{ID: primitive.NewObjectID()},
+			args:    args{ID: bson.NewObjectID()},
 			want:    0,
 			wantErr: false,
 		},

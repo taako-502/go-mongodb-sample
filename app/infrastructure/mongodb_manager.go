@@ -2,10 +2,10 @@ package infrastructure
 
 import (
 	"context"
+	"fmt"
 
-	"github.com/pkg/errors"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type mongoDBManager struct {
@@ -14,9 +14,9 @@ type mongoDBManager struct {
 }
 
 func NewMongoDBManager(ctx context.Context, connectionString string) (*mongoDBManager, error) {
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(connectionString))
+	client, err := mongo.Connect(options.Client().ApplyURI(connectionString))
 	if err != nil {
-		return nil, errors.Wrap(err, "mongo.Connect")
+		return nil, fmt.Errorf("mongo.Connect: %w", err)
 	}
 	return &mongoDBManager{
 		Client: client,

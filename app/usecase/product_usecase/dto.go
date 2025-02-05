@@ -3,11 +3,11 @@ package product_usecase
 import (
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 type productlDTO struct {
-	ID                 primitive.ObjectID
+	ID                 bson.ObjectID
 	Name               string
 	Description        string
 	Price              float64

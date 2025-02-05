@@ -2,6 +2,8 @@ package customer_controller
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -9,7 +11,6 @@ import (
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/customer_infrastructure"
 
 	"github.com/labstack/echo/v4"
-	"github.com/pkg/errors"
 )
 
 type NewCreate struct {
@@ -29,7 +30,7 @@ func (cc CostumerController) Create(c echo.Context) error {
 	defer cancel()
 	dbm, err := infrastructure.NewMongoDBManager(ctx, cc.ConnectionString)
 	if err != nil {
-		return errors.Wrap(err, "NewMongoDBManager")
+		return fmt.Errorf("NewMongoDBManager: %w", err)
 	}
 	defer dbm.Client.Disconnect(ctx)
 

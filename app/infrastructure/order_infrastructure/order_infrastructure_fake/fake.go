@@ -1,12 +1,12 @@
 package order_infrastructure_fake
 
 import (
+	"errors"
+
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/customer_infrastructure"
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/order_infrastructure"
 	"github.com/taako-502/go-mongodb-sample/app/model"
-
-	"github.com/pkg/errors"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 type fakeOrderRepository struct {
@@ -33,8 +33,8 @@ func (r *fakeOrderRepository) Create(dto *order_infrastructure.OrderDTO) (*order
 	return &order_infrastructure.OrderDTO{}, nil
 }
 
-func (r *fakeOrderRepository) FindByCustomerID(id primitive.ObjectID) ([]order_infrastructure.OrderDTO, error) {
-	emptyID, _ := primitive.ObjectIDFromHex("000000000000000000000000")
+func (r *fakeOrderRepository) FindByCustomerID(id bson.ObjectID) ([]order_infrastructure.OrderDTO, error) {
+	emptyID, _ := bson.ObjectIDFromHex("000000000000000000000000")
 	if id == emptyID {
 		return nil, customer_infrastructure.ErrCustomerNotFound
 	}
@@ -42,8 +42,8 @@ func (r *fakeOrderRepository) FindByCustomerID(id primitive.ObjectID) ([]order_i
 	return customers, nil
 }
 
-func (r *fakeOrderRepository) GetTotalAmountSpent(orderHistories []primitive.ObjectID) (float64, error) {
-	errorId, _ := primitive.ObjectIDFromHex("000000000000000000000400")
+func (r *fakeOrderRepository) GetTotalAmountSpent(orderHistories []bson.ObjectID) (float64, error) {
+	errorId, _ := bson.ObjectIDFromHex("000000000000000000000400")
 	if orderHistories[0] == errorId {
 		return 0, errors.New("test error")
 	}

@@ -3,17 +3,17 @@ package product_infrastructure
 import (
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 type ProductDTO struct {
-	ID                 primitive.ObjectID `bson:"_id,omitempty"`
-	Name               string             `bson:"name"`
-	Description        string             `bson:"description"`
-	Price              float64            `bson:"price"`
-	Stock              int                `bson:"stock"`
-	Category           string             `bson:"category"`
-	PromotionExpiresAt *time.Time         `bson:"promotion_expires_at"`
+	ID                 bson.ObjectID `bson:"_id,omitempty"`
+	Name               string        `bson:"name"`
+	Description        string        `bson:"description"`
+	Price              float64       `bson:"price"`
+	Stock              int           `bson:"stock"`
+	Category           string        `bson:"category"`
+	PromotionExpiresAt *time.Time    `bson:"promotion_expires_at"`
 }
 
 func NewProductDTO(name string, description string, price float64, stock int, category string) *ProductDTO {

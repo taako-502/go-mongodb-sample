@@ -2,9 +2,9 @@ package transaction_manager
 
 import (
 	"context"
+	"fmt"
 
-	"github.com/pkg/errors"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 type TransactionManager interface {
@@ -24,21 +24,21 @@ func NewMongoTransactionManager(ctx context.Context, client *mongo.Client) *Mong
 func (tm *MongoTransactionManager) WithSession(fn func(sc context.Context) error) error {
 	sess, err := tm.Client.StartSession()
 	if err != nil {
-		return errors.Wrap(err, "tm.Client.StartSession")
+		return fmt.Errorf("tm.Client.StartSession: %w", err)
 	}
 	defer sess.EndSession(tm.Ctx)
 
 	return mongo.WithSession(tm.Ctx, sess, func(sc mongo.SessionContext) error {
 		if err := sc.StartTransaction(); err != nil {
-			return errors.Wrap(err, "sc.StartTransaction()")
+			return fmt.Errorf("sc.StartTransaction(): %w", err)
 		}
 
 		if err := fn(sc); err != nil {
-			return errors.Wrap(err, "fn(mongo.SessionContext)")
+			return fmt.Errorf("fn(mongo.SessionContext): %w", err)
 		}
 
 		if erro := sc.CommitTransaction(sc); erro != nil {
-			return errors.Wrap(erro, "sc.CommitTransaction(sc)")
+			return fmt.Errorf("sc.CommitTransaction(sc): %w", erro)
 		}
 
 		return nil

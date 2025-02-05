@@ -2,6 +2,7 @@ package customer_controller
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -10,14 +11,13 @@ import (
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/customer_infrastructure"
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/order_infrastructure"
 	customer_usecase "github.com/taako-502/go-mongodb-sample/app/usecase/customer"
+	"go.mongodb.org/mongo-driver/v2/bson"
 
 	"github.com/labstack/echo/v4"
-	"github.com/pkg/errors"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func (cc CostumerController) GetTotalAmountSpent(c echo.Context) error {
-	ID, err := primitive.ObjectIDFromHex(c.Param("id"))
+	ID, err := bson.ObjectIDFromHex(c.Param("id"))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
@@ -27,7 +27,7 @@ func (cc CostumerController) GetTotalAmountSpent(c echo.Context) error {
 	defer cancel()
 	dbm, err := infrastructure.NewMongoDBManager(ctx, cc.ConnectionString)
 	if err != nil {
-		return errors.Wrap(err, "NewMongoDBManager")
+		return fmt.Errorf("NewMongoDBManager: %w", err)
 	}
 	defer dbm.Client.Disconnect(ctx)
 

@@ -5,8 +5,8 @@ import (
 	"os"
 
 	migrate "github.com/xakep666/mongo-migrate"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 func init() {

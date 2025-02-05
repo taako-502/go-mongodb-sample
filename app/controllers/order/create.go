@@ -2,6 +2,7 @@ package order_controller
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -10,14 +11,13 @@ import (
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/order_infrastructure"
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/transaction_manager"
 	"github.com/taako-502/go-mongodb-sample/app/usecase/order_usecase"
+	"go.mongodb.org/mongo-driver/v2/bson"
 
 	"github.com/labstack/echo/v4"
-	"github.com/pkg/errors"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type newCreate struct {
-	CustomerId primitive.ObjectID `json:"customerId" validate:"required"`
+	CustomerId bson.ObjectID `json:"customerId" validate:"required"`
 	// 2006-01-02
 	OrderDetails []orderDetail `json:"orderDetails" validate:"required"`
 	OrderDate    string        `json:"orderDate" validate:"required"`
@@ -25,9 +25,9 @@ type newCreate struct {
 }
 
 type orderDetail struct {
-	ProductID primitive.ObjectID `json:"productId" validate:"required"`
-	Quantity  int                `json:"quantity" validate:"required"`
-	Price     float64            `json:"price" validate:"required"`
+	ProductID bson.ObjectID `json:"productId" validate:"required"`
+	Quantity  int           `json:"quantity" validate:"required"`
+	Price     float64       `json:"price" validate:"required"`
 }
 
 func (oo OrderController) Create(c echo.Context) error {
@@ -61,7 +61,7 @@ func (oo OrderController) Create(c echo.Context) error {
 	defer cancel()
 	dbm, err := infrastructure.NewMongoDBManager(ctx, oo.ConnectionString)
 	if err != nil {
-		return errors.Wrap(err, "NewMongoDBManager")
+		return fmt.Errorf("NewMongoDBManager: %w", err)
 	}
 	defer dbm.Client.Disconnect(ctx)
 

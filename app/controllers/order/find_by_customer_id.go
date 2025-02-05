@@ -2,19 +2,20 @@ package order_controller
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure"
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/order_infrastructure"
+	"go.mongodb.org/mongo-driver/v2/bson"
 
 	"github.com/labstack/echo/v4"
-	"github.com/pkg/errors"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func (oo OrderController) FindByCustomerID(c echo.Context) error {
-	customerID, err := primitive.ObjectIDFromHex(c.Param("customer_id"))
+	customerID, err := bson.ObjectIDFromHex(c.Param("customer_id"))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
@@ -24,7 +25,7 @@ func (oo OrderController) FindByCustomerID(c echo.Context) error {
 	defer cancel()
 	dbm, err := infrastructure.NewMongoDBManager(ctx, oo.ConnectionString)
 	if err != nil {
-		return errors.Wrap(err, "NewMongoDBManager")
+		return fmt.Errorf("NewMongoDBManager: %w", err)
 	}
 	defer dbm.Client.Disconnect(ctx)
 

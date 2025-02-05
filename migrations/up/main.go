@@ -10,8 +10,8 @@ import (
 
 	"github.com/joho/godotenv"
 	migrate "github.com/xakep666/mongo-migrate"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 	}
 
 	uri := os.Getenv("MONGO_CONNECTION_STRING_FOR_MIGRATION")
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	client, err := mongo.Connect(options.Client().ApplyURI(uri))
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -3,25 +3,25 @@ package order_infrastructure
 import (
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 type OrderDetailDTO struct {
-	ProductID primitive.ObjectID `bson:"product_id"`
-	Quantity  int                `bson:"quantity"`
-	Price     float64            `bson:"price"`
+	ProductID bson.ObjectID `bson:"product_id"`
+	Quantity  int           `bson:"quantity"`
+	Price     float64       `bson:"price"`
 }
 
 type OrderDTO struct {
-	ID           primitive.ObjectID `bson:"_id,omitempty"`
-	CustomerID   primitive.ObjectID `bson:"customer_id"`
-	OrderDetails []OrderDetailDTO   `bson:"order_details"`
-	OrderDate    time.Time          `bson:"order_date"`
-	TotalAmount  float64            `bson:"total_amount"`
-	Status       string             `bson:"status"`
+	ID           bson.ObjectID    `bson:"_id,omitempty"`
+	CustomerID   bson.ObjectID    `bson:"customer_id"`
+	OrderDetails []OrderDetailDTO `bson:"order_details"`
+	OrderDate    time.Time        `bson:"order_date"`
+	TotalAmount  float64          `bson:"total_amount"`
+	Status       string           `bson:"status"`
 }
 
-func NewOrderDetailDTO(productID primitive.ObjectID, quantity int, price float64) *OrderDetailDTO {
+func NewOrderDetailDTO(productID bson.ObjectID, quantity int, price float64) *OrderDetailDTO {
 	return &OrderDetailDTO{
 		ProductID: productID,
 		Quantity:  quantity,
@@ -29,7 +29,7 @@ func NewOrderDetailDTO(productID primitive.ObjectID, quantity int, price float64
 	}
 }
 
-func NewOrderDTO(CustomerID primitive.ObjectID, OrderDetails []OrderDetailDTO, OrderDate time.Time, TotalAmount float64, Status string) *OrderDTO {
+func NewOrderDTO(CustomerID bson.ObjectID, OrderDetails []OrderDetailDTO, OrderDate time.Time, TotalAmount float64, Status string) *OrderDTO {
 	return &OrderDTO{
 		CustomerID:   CustomerID,
 		OrderDetails: OrderDetails,

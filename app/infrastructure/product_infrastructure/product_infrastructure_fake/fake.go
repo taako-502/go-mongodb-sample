@@ -1,11 +1,12 @@
 package product_infrastructure_fake
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/taako-502/go-mongodb-sample/app/infrastructure/product_infrastructure"
 	"github.com/taako-502/go-mongodb-sample/app/model"
-
-	"github.com/pkg/errors"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 type fakeProductRepository struct {
@@ -27,7 +28,7 @@ func (r *fakeProductRepository) Create(dto *product_infrastructure.ProductDTO) (
 		return nil, errors.New("test error")
 	}
 	if err, exists := r.insertProduct[dto]; exists {
-		return nil, errors.Wrap(err, "fakeUserRepository.insertUser")
+		return nil, fmt.Errorf("fakeUserRepository.insertUser: %w", err)
 	}
 	result := &product_infrastructure.ProductDTO{
 		Name:        dto.Name,
@@ -40,7 +41,7 @@ func (r *fakeProductRepository) Create(dto *product_infrastructure.ProductDTO) (
 	return result, nil
 }
 
-func (r *fakeProductRepository) FindOne(id primitive.ObjectID) (*product_infrastructure.ProductDTO, error) {
+func (r *fakeProductRepository) FindOne(id bson.ObjectID) (*product_infrastructure.ProductDTO, error) {
 	product := r.findProduct
 	product.ID = id
 	return product, nil
