@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type TransactionManager interface {
@@ -28,16 +29,16 @@ func (tm *MongoTransactionManager) WithSession(fn func(sc context.Context) error
 	}
 	defer sess.EndSession(tm.Ctx)
 
-	return mongo.WithSession(tm.Ctx, sess, func(sc mongo.SessionContext) error {
-		if err := sc.StartTransaction(); err != nil {
+	return mongo.WithSession(tm.Ctx, sess, func(ctx context.Context) error {
+		if err := sess.StartTransaction(options.Transaction()); err != nil {
 			return fmt.Errorf("sc.StartTransaction(): %w", err)
 		}
 
-		if err := fn(sc); err != nil {
+		if err := fn(ctx); err != nil {
 			return fmt.Errorf("fn(mongo.SessionContext): %w", err)
 		}
 
-		if erro := sc.CommitTransaction(sc); erro != nil {
+		if erro := sess.CommitTransaction(ctx); erro != nil {
 			return fmt.Errorf("sc.CommitTransaction(sc): %w", erro)
 		}
 
