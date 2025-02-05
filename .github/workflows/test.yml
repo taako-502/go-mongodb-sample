@@ -13,7 +13,7 @@ jobs:
 
     services:
       mongodb:
-        image: mongo:7.0.5
+        image: mongo:latest
         ports:
           - 27017:27017
 

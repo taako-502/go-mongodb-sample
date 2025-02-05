@@ -1,4 +1,4 @@
-FROM golang:1.22
+FROM golang:1.23
 
 # モジュールを使用して依存関係を管理
 ENV GO111MODULE=on
@@ -11,7 +11,7 @@ COPY . ./
 
 # airのインストール
 RUN go mod tidy
-RUN go install github.com/cosmtrek/air@latest
+RUN go install github.com/air-verse/air@latest
 
 # ポートを開放
 EXPOSE 1323

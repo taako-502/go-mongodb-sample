@@ -20,8 +20,11 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: 1.22
-        id: go
+          go-version-file: "go.mod"
+          check-latest: true
+          cache-dependency-path: |
+            go.mod
+            go.sum
 
       - name: Check out code into the Go module directory
         uses: actions/checkout@v4
